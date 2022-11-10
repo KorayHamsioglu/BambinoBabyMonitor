@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">BambinoBabyMonitor</string>
-    <string name="welcome">Hoşgeldiniz</string>
-    <string name="welcome_content">İki telefon kullanarak bebeğinizi izleyebilirsiniz. Telefonunuzu bebek monitörüne dönüştürün.</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_content">You can monitor your baby using two phones.Turn your smartphones into baby monitors.</string>
 </resources>
