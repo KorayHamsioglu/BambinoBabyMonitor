@@ -7,30 +7,38 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/wirelessactivitybackground"
-    tools:context=".WirelessActivity">
+    tools:context=".OfflineActivity">
 
-
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_phone"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="150dp"
+        android:textColor="@color/baby_yellow"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="20dp"
         android:gravity="center">
 
         <ImageButton
-            android:id="@+id/imageButtonOnline"
+            android:id="@+id/imageButtonParent"
             android:layout_width="143dp"
             android:layout_height="195dp"
-            android:background="@drawable/onlinemode" />
+            android:background="@drawable/buttonparent" />
         <ImageButton
-            android:id="@+id/imageButtonOffline"
+            android:id="@+id/imageButtonBaby"
             android:layout_width="143dp"
             android:layout_height="195dp"
             android:layout_marginLeft="20dp"
-            android:background="@drawable/offlinemode" />
+            android:background="@drawable/buttonbaby" />
 
 
     </LinearLayout>
-
 </LinearLayout>
