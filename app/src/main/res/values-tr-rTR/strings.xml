@@ -3,4 +3,5 @@
     <string name="app_name">BambinoBabyMonitor</string>
     <string name="welcome">Hoşgeldiniz</string>
     <string name="welcome_content">İki telefon kullanarak bebeğinizi izleyebilirsiniz. Telefonunuzu bebek monitörüne dönüştürün.</string>
+    <string name="set_phone">Telefonunuzu ayarlayın</string>
 </resources>
