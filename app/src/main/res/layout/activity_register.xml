@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/baby_lilac_bold"
+    android:orientation="vertical"
+
+    tools:context=".RegisterActivity">
+    <ImageButton
+        android:id="@+id/buttonRegisterBack"
+        android:layout_width="50dp"
+        android:layout_gravity="top"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/icon_back_foreground"
+        android:background="@color/baby_lilac_bold"/>
+
+    <EditText
+        android:id="@+id/editTextRegisterEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:hint="E-mail"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:id="@+id/textViewError1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/red"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/editTextRegisterPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:hint="Şifre" />
+
+    <TextView
+        android:id="@+id/textViewError2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/red"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/editTextRegisterRePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:hint="Şifre Tekrarı" />
+
+    <TextView
+        android:id="@+id/textViewError3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/red"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/baby_lilac_bold"
+        android:background="@drawable/login_button"
+        android:text="Kayıt Ol" />
+
+
+
+
+</LinearLayout>

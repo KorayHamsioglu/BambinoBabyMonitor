@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "405020483079",
+    "project_id": "bambinobabymonitor-704a2",
+    "storage_bucket": "bambinobabymonitor-704a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405020483079:android:fbbb6bb7b0648f277f14a2",
+        "android_client_info": {
+          "package_name": "com.example.bambinobabymonitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405020483079-ig6fb92bdtacs660lepteq3evt9nts06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJkv-XLGQJDrKRRHKNQlcVKAMeo4afdZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405020483079-ig6fb92bdtacs660lepteq3evt9nts06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
