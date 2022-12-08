@@ -2,6 +2,7 @@ package com.example.bambinobabymonitor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,7 +20,8 @@ public class WirelessActivity extends AppCompatActivity {
         activityWirelessBinding.imageButtonOnline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent=new Intent(WirelessActivity.this,LoginActivity.class);
+                startActivity(intent);
             }
         });
 
