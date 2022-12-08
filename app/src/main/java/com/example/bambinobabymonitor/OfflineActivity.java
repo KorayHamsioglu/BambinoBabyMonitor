@@ -2,6 +2,7 @@ package com.example.bambinobabymonitor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,14 +23,16 @@ public class OfflineActivity extends AppCompatActivity {
         activityOfflineBinding.imageButtonParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intentToOfflineParentActivity = new Intent(OfflineActivity.this,OfflineParentActivity.class);
+                startActivity(intentToOfflineParentActivity);
             }
         });
 
         activityOfflineBinding.imageButtonBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intentToOfflineBabyActivity = new Intent(OfflineActivity.this,OfflineBabyActivity.class);
+                startActivity(intentToOfflineBabyActivity);
             }
         });
 
