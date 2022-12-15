@@ -8,6 +8,7 @@ import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN_TIMEOUT = 2000;
+    public static final String RTMP_BASE_URL = "rtmp://192.168.1.102:1935/live/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
