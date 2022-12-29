@@ -35,9 +35,10 @@
         <ImageButton
             android:id="@+id/settings_button"
             style="?borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
+
             android:onClick="showSetResolutionDialog"
             android:src="@drawable/icon_settings_foreground"
             />
@@ -45,18 +46,19 @@
         <ImageButton
             android:id="@+id/changeCameraButton"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:onClick="changeCamera"
+            android:layout_marginHorizontal="25dp"
             android:src="@drawable/icon_switch_foreground"
             />
 
         <ImageButton
             android:id="@+id/mic_mute_button"
             style="?attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:onClick="toggleMute"
             android:src="@drawable/icon_mic_off_foreground"
@@ -84,23 +86,17 @@
         android:padding="24dp"
         android:visibility="visible"
         >
-        <EditText
-            android:id="@+id/stream_name_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="stream name"
-            android:textAppearance="?android:textAppearanceMedium"
-            />
-        <Button
+
+        <ImageButton
             android:id="@+id/toggle_broadcasting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:textColor="@android:color/white"
-            android:text="start"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_baseline_fiber_manual_record_24"
+            style="?attr/borderlessButtonStyle"
             android:onClick="toggleBroadcasting"
+            android:adjustViewBounds="true"
             android:layout_gravity="center_horizontal"
-            android:textAppearance="?android:textAppearanceMedium"
+
             />
     </LinearLayout>
 

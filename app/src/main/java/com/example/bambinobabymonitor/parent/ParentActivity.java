@@ -2,6 +2,7 @@ package com.example.bambinobabymonitor.parent;
 
 import static com.example.bambinobabymonitor.MainActivity.RTMP_BASE_URL;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -54,10 +55,22 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.onesignal.OneSignal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParentActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {
@@ -89,9 +102,11 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     private long resumePosition;
     private RtmpDataSource.RtmpDataSourceFactory rtmpDataSourceFactory;
     protected String userAgent;
-    private EditText videoNameEditText;
     private View videoStartControlLayout;
-
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+    private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
+    private String babyPlayerID;
     // Activity lifecycle
 
     @Override
@@ -108,6 +123,35 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
 
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseFirestore=FirebaseFirestore.getInstance();
+
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+
+
+        documentReference.update("parentPlayerID",OneSignal.getDeviceState().getUserId());
+
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot=task.getResult();
+                    if(documentSnapshot.exists()){
+                        babyPlayerID=documentSnapshot.getString("babyPlayerID");
+                        try {
+                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Ebeveyn uygulamaya başarıyla giriş yaptı'}, 'include_player_ids': ['"+babyPlayerID+"']}"),null);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
         setContentView(R.layout.activity_parent);
         View rootView = findViewById(R.id.root);
         rootView.setOnClickListener(this);
@@ -116,8 +160,11 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         retryButton = (Button) findViewById(R.id.retry_button);
         retryButton.setOnClickListener(this);
 
-        videoNameEditText = (EditText) findViewById(R.id.video_name_edit_text);
+
+
         videoStartControlLayout = findViewById(R.id.video_start_control_layout);
+
+
 
         simpleExoPlayerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
         simpleExoPlayerView.setControllerVisibilityListener(this);
@@ -449,7 +496,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void play(View view) {
-        String URL = RTMP_BASE_URL + videoNameEditText.getText().toString();
+        String URL = RTMP_BASE_URL + firebaseAuth.getCurrentUser().getEmail();
         //String URL = "http://192.168.1.34:5080/vod/streams/test_adaptive.m3u8";
         initializePlayer(URL);
         videoStartControlLayout.setVisibility(View.GONE);

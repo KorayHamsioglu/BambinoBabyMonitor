@@ -2,6 +2,7 @@ package com.example.bambinobabymonitor.baby;
 
 import static com.example.bambinobabymonitor.MainActivity.RTMP_BASE_URL;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
@@ -37,9 +38,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bambinobabymonitor.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.onesignal.OneSignal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,7 +67,6 @@ public class BabyActivity extends AppCompatActivity {
     private ViewGroup mRootView;
     boolean mIsRecording = false;
     boolean mIsMuted = false;
-    private EditText mStreamNameEditText;
     private Timer mTimer;
     private long mElapsedTime;
     public TimerHandler mTimerHandler;
@@ -63,8 +76,11 @@ public class BabyActivity extends AppCompatActivity {
     private TextView mStreamLiveStatus;
     private GLSurfaceView mGLView;
     private ILiveVideoBroadcaster mLiveVideoBroadcaster;
-    private Button mBroadcastControlButton;
-
+    private ImageButton mBroadcastControlButton;
+     FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+    private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
+    private String parentPlayerID;
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -109,20 +125,55 @@ public class BabyActivity extends AppCompatActivity {
         //binding on resume not to having leaked service connection
         mLiveVideoBroadcasterServiceIntent = new Intent(this, LiveVideoBroadcaster.class);
         //this makes service do its job until done
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseFirestore=FirebaseFirestore.getInstance();
 
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        //System.out.println(OneSignal.getDeviceState().getUserId());
+
+        String userID = firebaseAuth.getCurrentUser().getUid();
+         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+
+        documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot=task.getResult();
+                    if(documentSnapshot.exists()){
+                        parentPlayerID=documentSnapshot.getString("parentPlayerID");
+
+                        try {
+                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebek uygulamaya başarıyla giriş yaptı'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
+        //Toast.makeText(this, (firebaseAuth.getCurrentUser().getEmail), Toast.LENGTH_SHORT).show();
         startService(mLiveVideoBroadcasterServiceIntent);
 
 
 
 
         mTimerHandler = new TimerHandler();
-        mStreamNameEditText =(EditText) findViewById(R.id.stream_name_edit_text);
+
 
         mRootView = (ViewGroup)findViewById(R.id.root_layout);
         mSettingsButton = (ImageButton)findViewById(R.id.settings_button);
         mStreamLiveStatus = (TextView) findViewById(R.id.stream_live_status);
 
-        mBroadcastControlButton = (Button) findViewById(R.id.toggle_broadcasting);
+        mBroadcastControlButton = (ImageButton) findViewById(R.id.toggle_broadcasting);
 
 
         // Configure the GLSurfaceView.  This will start the Renderer thread, with an
@@ -256,15 +307,15 @@ public class BabyActivity extends AppCompatActivity {
 
             if (mLiveVideoBroadcaster != null) {
                 if (!mLiveVideoBroadcaster.isConnected()) {
-                    String streamName = mStreamNameEditText.getText().toString();
-
+                   String streamName = firebaseAuth.getCurrentUser().getEmail();
+                    Toast.makeText(this, streamName, Toast.LENGTH_SHORT).show();
+                      //String streamName=
                     new AsyncTask<String, String, Boolean>() {
-                        ContentLoadingProgressBar
-                                progressBar;
+                        ContentLoadingProgressBar progressBar;
                         @Override
                         protected void onPreExecute() {
                             progressBar = new ContentLoadingProgressBar(BabyActivity.this);
-                            progressBar.show();
+                           progressBar.show();
                         }
 
                         @Override
@@ -280,7 +331,7 @@ public class BabyActivity extends AppCompatActivity {
                             if (result) {
                                 mStreamLiveStatus.setVisibility(View.VISIBLE);
 
-                                mBroadcastControlButton.setText("R.string.stop_broadcasting");
+                                mBroadcastControlButton.setColorFilter(getResources().getColor(R.color.red));
                                 mSettingsButton.setVisibility(View.GONE);
                                 startTimer();//start the recording duration
                             }
@@ -319,7 +370,7 @@ public class BabyActivity extends AppCompatActivity {
 
     public void triggerStopRecording() {
         if (mIsRecording) {
-            mBroadcastControlButton.setText("R.string.start_broadcasting");
+            mBroadcastControlButton.setColorFilter(getResources().getColor(R.color.baby_blue_green));
 
             mStreamLiveStatus.setVisibility(View.GONE);
             mStreamLiveStatus.setText("R.string.live_indicator");
@@ -374,7 +425,7 @@ public class BabyActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case INCREASE_TIMER:
-                    mStreamLiveStatus.setText(getString(io.antmedia.android.R.string.permission) + " - " + getDurationString((int) mElapsedTime));
+                    mStreamLiveStatus.setText(getDurationString((int) mElapsedTime));
                     break;
                 case CONNECTION_LOST:
                     triggerStopRecording();
