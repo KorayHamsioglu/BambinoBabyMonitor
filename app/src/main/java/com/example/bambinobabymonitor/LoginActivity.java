@@ -13,10 +13,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.onesignal.OneSignal;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding activityLoginBinding;
     FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +28,12 @@ public class LoginActivity extends AppCompatActivity {
 
         firebaseAuth=FirebaseAuth.getInstance();
 
+
+
         activityLoginBinding.buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent=new Intent(LoginActivity.this,OfflineActivity.class);
                 startActivity(intent);
             }
         });

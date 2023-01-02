@@ -1,7 +1,12 @@
 package com.example.bambinobabymonitor;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -12,48 +17,26 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import com.example.bambinobabymonitor.databinding.ActivityOfflineBabyBinding;
+import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class OfflineBabyActivity extends Activity {
-    ActivityOfflineBabyBinding activityOfflineBabyBinding;
+public class OfflineBabyActivity extends AppCompatActivity {
+
     NsdManager _nsdManager;
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
-    boolean permissionToRecordAccepted = false;
-
     NsdManager.RegistrationListener _registrationListener;
-
     Thread _serviceThread;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted ) finish();
-
-    }
 
     private void serviceConnection(Socket socket) throws IOException {
         OfflineBabyActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityOfflineBabyBinding.textService.setText("Streaming...");
-
+              //  final TextView statusText = (TextView) findViewById(R.id.textStatus);
+               // statusText.setText(R.string.streaming);
             }
         });
 
@@ -62,29 +45,43 @@ public class OfflineBabyActivity extends Activity {
         final int audioEncoding = AudioFormat.ENCODING_PCM_16BIT;
 
         final int bufferSize = AudioRecord.getMinBufferSize(frequency, channelConfiguration, audioEncoding);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},100);
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         final AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 frequency, channelConfiguration,
                 audioEncoding, bufferSize);
-
+        // mediaRecorder=new MediaRecorder();
         final int byteBufferSize = bufferSize*2;
         final byte[] buffer = new byte[byteBufferSize];
 
         try
         {
-            audioRecord.startRecording();
-
             final OutputStream out = socket.getOutputStream();
+            audioRecord.startRecording();
+            //  mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            //mediaRecorder.prepare();
+            //mediaRecorder.start();
+
 
             socket.setSendBufferSize(byteBufferSize);
+            Log.d(TAG, "Socket send buffer size: " + socket.getSendBufferSize());
 
-            while (socket.isConnected() && Thread.currentThread().isInterrupted() == false)
+            while (Thread.currentThread().isInterrupted() == false)
             {
                 final int read = audioRecord.read(buffer, 0, bufferSize);
+                // System.out.println(mediaRecorder.getMaxAmplitude());
                 out.write(buffer, 0, read);
+
             }
         }
         finally
@@ -93,15 +90,13 @@ public class OfflineBabyActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        activityOfflineBabyBinding = ActivityOfflineBabyBinding.inflate(getLayoutInflater());
-        View view = activityOfflineBabyBinding.getRoot();
-        setContentView(view);
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_offline_baby);
+
+        _nsdManager = (NsdManager)this.getSystemService(Context.NSD_SERVICE);
 
         _serviceThread = new Thread(new Runnable()
         {
@@ -126,7 +121,10 @@ public class OfflineBabyActivity extends Activity {
 
                         // Wait for a parent to find us and connect
                         Socket socket = serverSocket.accept();
+                        Log.i(TAG, "Connection from parent device received");
 
+                        // We now have a client connection.
+                        // Unregister so no other clients will
                         // attempt to connect
                         serverSocket.close();
                         serverSocket = null;
@@ -143,7 +141,7 @@ public class OfflineBabyActivity extends Activity {
                     }
                     catch(IOException e)
                     {
-
+                        Log.e(TAG, "Connection failed", e);
                     }
 
                     // If an exception was thrown before the connection
@@ -156,7 +154,7 @@ public class OfflineBabyActivity extends Activity {
                         }
                         catch (IOException e)
                         {
-
+                            Log.e(TAG, "Failed to close stray connection", e);
                         }
                         serverSocket = null;
                     }
@@ -165,6 +163,7 @@ public class OfflineBabyActivity extends Activity {
         });
         _serviceThread.start();
 
+        final TextView addressText = (TextView) findViewById(R.id.textViewIP);
 
         // Use the application context to get WifiManager, to avoid leak before Android 5.1
         final WifiManager wifiManager =
@@ -175,18 +174,18 @@ public class OfflineBabyActivity extends Activity {
         {
             @SuppressWarnings("deprecation")
             final String ipAddress = Formatter.formatIpAddress(address);
-            activityOfflineBabyBinding.address.setText(ipAddress);
+            addressText.setText(ipAddress);
         }
         else
         {
-            activityOfflineBabyBinding.address.setText("Disconnect!");
+            addressText.setText("No wifi");
         }
-
     }
 
     @Override
     protected void onDestroy()
     {
+        Log.i(TAG, "Baby monitor stop");
 
         unregisterService();
 
@@ -215,16 +214,20 @@ public class OfflineBabyActivity extends Activity {
                 // with the name Android actually used.
                 final String serviceName = nsdServiceInfo.getServiceName();
 
-
+                Log.i(TAG, "Service name: " + serviceName);
 
                 OfflineBabyActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run()
                     {
-                        activityOfflineBabyBinding.textService.setText("Waiting For Parent!");
-                        activityOfflineBabyBinding.textService.setText(serviceName);
-                        activityOfflineBabyBinding.port.setText(Integer.toString(port));
+                       // final TextView statusText = (TextView) findViewById(R.id.textStatus);
+                       // statusText.setText(R.string.waitingForParent);
 
+                        //final TextView serviceText = (TextView) findViewById(R.id.textService);
+                        //serviceText.setText(serviceName);
+
+                        final TextView portText = (TextView) findViewById(R.id.textViewPort);
+                        portText.setText(Integer.toString(port));
                     }
                 });
             }
@@ -232,34 +235,37 @@ public class OfflineBabyActivity extends Activity {
             @Override
             public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode)
             {
-
+                // Registration failed!  Put debugging code here to determine why.
+                Log.e(TAG, "Registration failed: " + errorCode);
             }
 
             @Override
             public void onServiceUnregistered(NsdServiceInfo arg0)
             {
+                // Service has been unregistered.  This only happens when you call
+                // NsdManager.unregisterService() and pass in this listener.
 
+                Log.i(TAG, "Unregistering service");
             }
 
             @Override
             public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode)
             {
+                // Unregistration failed.  Put debugging code here to determine why.
 
+                Log.e(TAG, "Unregistration failed: " + errorCode);
             }
         };
 
-        _nsdManager.registerService(serviceInfo, NsdManager.PROTOCOL_DNS_SD, _registrationListener);
+        _nsdManager.registerService(
+                serviceInfo, NsdManager.PROTOCOL_DNS_SD, _registrationListener);
     }
 
-    /**
-     * Uhregistered the service and assigns the listener
-     * to null.
-     */
     private void unregisterService()
     {
         if(_registrationListener != null)
         {
-
+            Log.i(TAG, "Unregistering monitoring service");
 
             _nsdManager.unregisterService(_registrationListener);
             _registrationListener = null;

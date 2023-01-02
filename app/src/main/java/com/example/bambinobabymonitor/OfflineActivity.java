@@ -23,16 +23,16 @@ public class OfflineActivity extends AppCompatActivity {
         activityOfflineBinding.imageButtonParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentToOfflineParentActivity = new Intent(OfflineActivity.this,OfflineParentActivity.class);
-                startActivity(intentToOfflineParentActivity);
+                Intent intent=new Intent(OfflineActivity.this,OfflineParentActivity.class);
+                startActivity(intent);
             }
         });
 
         activityOfflineBinding.imageButtonBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentToOfflineBabyActivity = new Intent(OfflineActivity.this,OfflineBabyActivity.class);
-                startActivity(intentToOfflineBabyActivity);
+                Intent intent=new Intent(OfflineActivity.this,OfflineBabyActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -26,7 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         activityWelcomeBinding.buttonGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentToWirelessActivity=new Intent(WelcomeActivity.this,WirelessActivity.class);
+                Intent intentToWirelessActivity=new Intent(WelcomeActivity.this,LoginActivity.class);
                 startActivity(intentToWirelessActivity);
             }
         });

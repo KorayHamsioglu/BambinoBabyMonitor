@@ -148,6 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.show();
 
+
     }
 
     public boolean isValidEmail(CharSequence text){

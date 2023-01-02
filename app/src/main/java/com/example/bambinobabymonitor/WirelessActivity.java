@@ -22,6 +22,7 @@ public class WirelessActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(WirelessActivity.this,LoginActivity.class);
                 startActivity(intent);
+
             }
         });
 

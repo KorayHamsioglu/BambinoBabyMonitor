@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".baby.BabyActivity"
+    android:id="@+id/root_layout">
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/cameraPreview_surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:visibility="gone"
+        android:layout_gravity="center" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/transparent_cover"
+        android:background="#77000000"/>
+    <!--
+   </com.google.android.exoplayer.AspectRatioFrameLayout>
+    -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="4dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_alignParentStart="true">
+        <ImageButton
+            android:id="@+id/settings_button"
+            style="?borderlessButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+
+            android:onClick="showSetResolutionDialog"
+            android:src="@drawable/icon_settings_foreground"
+            />
+
+        <ImageButton
+            android:id="@+id/changeCameraButton"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:onClick="changeCamera"
+            android:layout_marginHorizontal="25dp"
+            android:src="@drawable/icon_switch_foreground"
+            />
+
+        <ImageButton
+            android:id="@+id/mic_mute_button"
+            style="?attr/borderlessButtonStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:onClick="toggleMute"
+            android:src="@drawable/icon_mic_off_foreground"
+            />
+
+
+        <TextView
+            android:id="@+id/stream_live_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            android:text="@string/live_indicator"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="visible"
+        >
+
+        <ImageButton
+            android:id="@+id/toggle_broadcasting"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_baseline_fiber_manual_record_24"
+            style="?attr/borderlessButtonStyle"
+            android:onClick="toggleBroadcasting"
+            android:adjustViewBounds="true"
+            android:layout_gravity="center_horizontal"
+
+            />
+    </LinearLayout>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
