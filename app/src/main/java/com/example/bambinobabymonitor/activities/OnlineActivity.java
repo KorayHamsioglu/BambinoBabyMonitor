@@ -1,4 +1,4 @@
-package com.example.bambinobabymonitor;
+package com.example.bambinobabymonitor.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.baby.BabyActivity;
 import com.example.bambinobabymonitor.parent.ParentActivity;
 

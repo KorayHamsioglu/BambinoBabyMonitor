@@ -7,7 +7,7 @@
     android:background="@color/baby_lilac_bold"
     android:orientation="vertical"
 
-    tools:context=".RegisterActivity">
+    tools:context=".activities.RegisterActivity">
     <ImageButton
         android:id="@+id/buttonRegisterBack"
         android:layout_width="50dp"

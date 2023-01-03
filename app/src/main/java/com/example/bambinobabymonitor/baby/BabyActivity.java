@@ -1,6 +1,6 @@
 package com.example.bambinobabymonitor.baby;
 
-import static com.example.bambinobabymonitor.MainActivity.RTMP_BASE_URL;
+import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_URL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +30,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +37,6 @@ import android.widget.Toast;
 
 import com.example.bambinobabymonitor.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,8 +54,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -147,7 +142,7 @@ public class BabyActivity extends AppCompatActivity {
 
          DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
 
-         documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
+         documentReference.update("babyPlayerID",OneSignal.getDeviceState());
 
 
         databaseReference.addValueEventListener(new ValueEventListener() {
