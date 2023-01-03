@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BambinoBabyMonitor</string>
-    <string name="welcome">Hoşgeldiniz</string>
-    <string name="welcome_content">İki telefon kullanarak bebeğinizi izleyebilirsiniz. Telefonunuzu bebek monitörüne dönüştürün.</string>
     <string name="set_phone">Telefonunuzu ayarlayın</string>
+    <string name="fragment_1_title">HOŞGELDİNİZ!</string>
+    <string name="fragment_1_context">İki Telefon Kullanarak Bebeğinizi Gözetleyebilirsiniz. Akıllı telefonlarınızı Bebek Monitörüne Dönüştürün!</string>
+    <string name="fragment_2_title">ADIM 1: Mail</string>
+    <string name="fragment_2_context">Bebek ve Ebeveyn Telefonlarına Aynı Mail İle Giriş Yapın</string>
+    <string name="fragment_3_title">ADIM 2: Bebek Telefonunu Ayarlayın</string>
+    <string name="fragment_3_context">Bebeği Net Görecek Bir Şekilde Bir Yayın Başlatın. İnternet Bağlantısı Olduğundan Emin Olun.</string>
+    <string name="fragment_4_title">ADIM 3: Ebeveyn Telefonunu Ayarlayın</string>
+    <string name="fragment_4_context">Bebeğinizin Yayınına Otomatik Katılın. Nerede Olursanız Olun Bebeğinize Yakın Olun!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

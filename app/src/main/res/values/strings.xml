@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">BambinoBabyMonitor</string>
-    <string name="welcome">Welcome</string>
-    <string name="welcome_content">You can monitor your baby using two phones.Turn your smartphones into baby monitors.</string>
+
     <string name="set_phone">Set Phone for the </string>
+    <string name="fragment_1_title">WELCOME!</string>
+    <string name="fragment_1_context">You Can Monitor Your Baby Using Two Phones. Turn Your Smartphones Into Baby Monitors.</string>
+    <string name="fragment_2_title">STEP 1: Mail</string>
+    <string name="fragment_2_context">Log In The Both The Baby Phone And The Parent Phone On The Same Email. </string>
+    <string name="fragment_3_title">STEP 2: Set Baby Phone</string>
+    <string name="fragment_3_context">Start A Broadcast With A Clear View Of The Baby. Make Sure You Have Internet.</string>
+    <string name="fragment_4_title">STEP 3: Set Parent Phone</string>
+    <string name="fragment_4_context">Join The Broadcast. Stay Close To Your Baby Wherever You Are!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

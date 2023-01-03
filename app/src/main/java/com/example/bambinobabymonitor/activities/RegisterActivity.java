@@ -1,7 +1,6 @@
-package com.example.bambinobabymonitor;
+package com.example.bambinobabymonitor.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.databinding.ActivityRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

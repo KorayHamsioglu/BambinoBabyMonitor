@@ -1,6 +1,6 @@
 package com.example.bambinobabymonitor.parent;
 
-import static com.example.bambinobabymonitor.MainActivity.RTMP_BASE_URL;
+import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_URL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,8 +68,6 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ParentActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {

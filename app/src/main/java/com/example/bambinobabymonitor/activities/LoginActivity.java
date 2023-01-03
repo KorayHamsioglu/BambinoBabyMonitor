@@ -1,4 +1,4 @@
-package com.example.bambinobabymonitor;
+package com.example.bambinobabymonitor.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,39 +13,37 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.onesignal.OneSignal;
 
 public class LoginActivity extends AppCompatActivity {
-    private ActivityLoginBinding activityLoginBinding;
+    ActivityLoginBinding activityLoginBinding;
     FirebaseAuth firebaseAuth;
-
+    FirebaseUser firebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityLoginBinding=ActivityLoginBinding.inflate(getLayoutInflater());
         View view=activityLoginBinding.getRoot();
         setContentView(view);
-
         firebaseAuth=FirebaseAuth.getInstance();
-
-
-
+        firebaseUser=firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null){
+            Intent intent=new Intent(LoginActivity.this,OnlineActivity.class);
+            startActivity(intent);
+            finish();
+        }
         activityLoginBinding.buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this,OfflineActivity.class);
+                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
             }
         });
-
         activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email=activityLoginBinding.editTextEmail.getText().toString();
                 String password=activityLoginBinding.editTextPassword.getText().toString();
                 activityLoginBinding.textViewErrorLogin.setVisibility(View.INVISIBLE);
-
-
                 firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -53,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser= firebaseAuth.getCurrentUser();
                             if(firebaseUser.isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this,OnlineActivity.class));
+                                finish();
                             }
                             else{
                                 activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);

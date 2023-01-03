@@ -1,6 +1,6 @@
 package com.example.bambinobabymonitor.baby;
 
-import static com.example.bambinobabymonitor.MainActivity.RTMP_BASE_URL;
+import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_URL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +30,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,10 +37,14 @@ import android.widget.Toast;
 
 import com.example.bambinobabymonitor.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,8 +54,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -79,8 +79,11 @@ public class BabyActivity extends AppCompatActivity {
     private ImageButton mBroadcastControlButton;
      FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
     private String parentPlayerID;
+
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -126,34 +129,58 @@ public class BabyActivity extends AppCompatActivity {
         mLiveVideoBroadcasterServiceIntent = new Intent(this, LiveVideoBroadcaster.class);
         //this makes service do its job until done
         firebaseAuth=FirebaseAuth.getInstance();
+        String userID = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore=FirebaseFirestore.getInstance();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("message").child(userID);
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
         //System.out.println(OneSignal.getDeviceState().getUserId());
 
-        String userID = firebaseAuth.getCurrentUser().getUid();
+
          DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
 
-        documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot documentSnapshot=task.getResult();
-                    if(documentSnapshot.exists()){
-                        parentPlayerID=documentSnapshot.getString("parentPlayerID");
+         documentReference.update("babyPlayerID",OneSignal.getDeviceState());
 
-                        try {
-                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebek uygulamaya başarıyla giriş yaptı'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot ds: snapshot.getChildren()){
+                    String komut= (String) ds.getValue();
+                    if (komut.equals("uyari")){
+                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    DocumentSnapshot documentSnapshot=task.getResult();
+                                    if(documentSnapshot.exists()){
+                                        parentPlayerID=documentSnapshot.getString("parentPlayerID");
+
+                                        try {
+                                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebeğiniz Ağlıyor!'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        });
                     }
+                    Toast.makeText(BabyActivity.this, "Komut:" + komut, Toast.LENGTH_SHORT).show();
                 }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
 
 
 

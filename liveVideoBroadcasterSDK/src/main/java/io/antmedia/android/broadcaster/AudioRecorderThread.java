@@ -5,6 +5,11 @@ import android.media.MediaRecorder;
 import android.os.Message;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.IOException;
 
 import io.antmedia.android.broadcaster.encoder.AudioHandler;
@@ -22,6 +27,10 @@ class AudioRecorderThread extends Thread {
 
     private android.media.AudioRecord audioRecord;
     private AudioHandler audioHandler;
+
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     public AudioRecorderThread(int sampleRate, long recordStartTime, AudioHandler audioHandler) {
         this.mSampleRate = sampleRate;
@@ -47,6 +56,10 @@ class AudioRecorderThread extends Thread {
 
         // divide byte buffersize to 2 to make it short buffer
         audioData = new byte[1000][bufferSize];
+
+        firebaseAuth=FirebaseAuth.getInstance();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference();
 
         MediaRecorder mediaRecorder=new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -75,7 +88,7 @@ class AudioRecorderThread extends Thread {
                 environmentVoice += mediaRecorder.getMaxAmplitude();
             }else if(j == 100 ){
                 environmentVoice /= 100;
-                System.out.println("Ortam Sesi: "+environmentVoice);
+                System.out.println("OrtamSESİ :" +environmentVoice);
             }
 
 
@@ -86,6 +99,9 @@ class AudioRecorderThread extends Thread {
                 if(environmentVoice + 4000 < babyVoice){
                     //TODO: Push Notification!
                     System.out.println("Uyarı!");
+                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("uyari");
+                }else{
+                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("yok");
                 }
                 k = 0;
                 babyVoice = 0;
