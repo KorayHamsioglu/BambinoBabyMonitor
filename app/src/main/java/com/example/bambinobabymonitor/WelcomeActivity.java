@@ -1,6 +1,8 @@
 package com.example.bambinobabymonitor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.bambinobabymonitor.databinding.ActivityWelcomeBinding;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -23,13 +27,20 @@ public class WelcomeActivity extends AppCompatActivity {
         View view=activityWelcomeBinding.getRoot();
         setContentView(view);
 
-        activityWelcomeBinding.buttonGetStarted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentToWirelessActivity=new Intent(WelcomeActivity.this,LoginActivity.class);
-                startActivity(intentToWirelessActivity);
-            }
-        });
+        TabLayout tabLayout=findViewById(R.id.tabs);
+        ViewPager2 viewPager2=findViewById(R.id.viewPager);
+
+
+       ViewPagerAdapter adapter=new ViewPagerAdapter(this);
+       viewPager2.setAdapter(adapter);
+
+       new TabLayoutMediator(tabLayout, viewPager2,
+               new TabLayoutMediator.TabConfigurationStrategy() {
+                   @Override
+                   public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+
+                   }
+               }).attach();
 
 
     }

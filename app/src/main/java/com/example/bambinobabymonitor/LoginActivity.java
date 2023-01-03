@@ -18,7 +18,7 @@ import com.onesignal.OneSignal;
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding activityLoginBinding;
     FirebaseAuth firebaseAuth;
-
+    FirebaseUser firebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +27,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
 
         firebaseAuth=FirebaseAuth.getInstance();
-
+        firebaseUser=firebaseAuth.getCurrentUser();
+        if(firebaseUser!=null){
+            Intent intent=new Intent(LoginActivity.this,OnlineActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
 
         activityLoginBinding.buttonSignIn.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(LoginActivity.this,OfflineActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -53,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser= firebaseAuth.getCurrentUser();
                             if(firebaseUser.isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this,OnlineActivity.class));
+                                finish();
                             }
                             else{
                                 activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
