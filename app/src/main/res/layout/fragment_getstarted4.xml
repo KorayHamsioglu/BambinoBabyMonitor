@@ -43,16 +43,19 @@
             android:layout_width="50dp"
             android:id="@+id/beforeButton4"
             android:src="@drawable/before"
+            android:visibility="invisible"
             android:layout_height="50dp">
         </ImageView>
         <ImageView
             android:layout_width="50dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/nextButton4"
             android:layout_marginLeft="250dp"
             android:src="@drawable/next"
             android:layout_height="50dp">
         </ImageView>
+
+
     </LinearLayout>
     <Space
         android:layout_width="match_parent"

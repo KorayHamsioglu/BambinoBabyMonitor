@@ -59,7 +59,7 @@ class AudioRecorderThread extends Thread {
 
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference();
+        databaseReference=firebaseDatabase.getReference("Users");
 
         MediaRecorder mediaRecorder=new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -96,12 +96,12 @@ class AudioRecorderThread extends Thread {
                 babyVoice += mediaRecorder.getMaxAmplitude();
             }else if(k == 200){
                 babyVoice /= 200;
-                if(environmentVoice + 4000 < babyVoice){
+                if(environmentVoice + 1000 < babyVoice){
                     //TODO: Push Notification!
                     System.out.println("Uyarı!");
-                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("uyari");
+                    databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
                 }else{
-                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("yok");
+                    databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(false);
                 }
                 k = 0;
                 babyVoice = 0;

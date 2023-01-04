@@ -46,7 +46,8 @@ public class WelcomeActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                // TODO: Koray (Back - Next Button in Fragments!)
+
+
             }
         }).attach();
     }

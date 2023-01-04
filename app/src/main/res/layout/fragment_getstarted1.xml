@@ -50,6 +50,7 @@
             android:id="@+id/nextButton1"
             android:layout_marginLeft="250dp"
             android:src="@drawable/next"
+            android:visibility="invisible"
             android:layout_height="50dp">
         </ImageView>
     </LinearLayout>

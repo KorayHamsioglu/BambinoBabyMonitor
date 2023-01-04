@@ -3,6 +3,7 @@ package com.example.bambinobabymonitor.baby;
 import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_URL;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
@@ -40,6 +41,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -132,47 +135,42 @@ public class BabyActivity extends AppCompatActivity {
         String userID = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("message").child(userID);
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
-        //System.out.println(OneSignal.getDeviceState().getUserId());
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
 
-
-         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-
-         documentReference.update("babyPlayerID",OneSignal.getDeviceState());
-
+        databaseReference=firebaseDatabase.getReference("Users").child(userID);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String, Object> hashMap= (HashMap<String, Object>) snapshot.getValue();
+                String commandMusicPlay= (String) hashMap.get("command_music_play");
+                Boolean commandVoice= (Boolean) hashMap.get("command_voice");
+                String commandRecord= (String) hashMap.get("command_record");
 
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    String komut= (String) ds.getValue();
-                    if (komut.equals("uyari")){
-                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    DocumentSnapshot documentSnapshot=task.getResult();
-                                    if(documentSnapshot.exists()){
-                                        parentPlayerID=documentSnapshot.getString("parentPlayerID");
+                if (commandVoice){
+                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot documentSnapshot=task.getResult();
+                                if(documentSnapshot.exists()){
+                                    parentPlayerID=documentSnapshot.getString("parentPlayerID");
 
-                                        try {
-                                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebeğiniz Ağlıyor!'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                                    try {
+                                        OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebeğiniz Ağlıyor!'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }
-                        });
-                    }
-                    Toast.makeText(BabyActivity.this, "Komut:" + komut, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-
             }
 
             @Override
@@ -180,9 +178,6 @@ public class BabyActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
 
 

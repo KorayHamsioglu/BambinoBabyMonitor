@@ -43,6 +43,7 @@
             android:layout_width="50dp"
             android:id="@+id/beforeButton2"
             android:src="@drawable/before"
+            android:visibility="invisible"
             android:layout_height="50dp">
         </ImageView>
         <ImageView
@@ -50,6 +51,7 @@
             android:id="@+id/nextButton2"
             android:layout_marginLeft="250dp"
             android:src="@drawable/next"
+            android:visibility="invisible"
             android:layout_height="50dp">
         </ImageView>
     </LinearLayout>
