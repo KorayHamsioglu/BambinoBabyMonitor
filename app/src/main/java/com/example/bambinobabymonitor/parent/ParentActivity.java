@@ -4,7 +4,10 @@ import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_U
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,11 +17,14 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bambinobabymonitor.R;
+import com.example.bambinobabymonitor.adapters.MusicListAdapter;
 import com.google.android.exoplayer2.BuildConfig;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -57,6 +63,9 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,6 +77,7 @@ import org.json.JSONObject;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
 
 public class ParentActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {
@@ -87,6 +97,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout debugRootView;
     private TextView debugTextView;
     private Button retryButton;
+    private ImageView musicListView;
 
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
@@ -102,6 +113,8 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     private View videoStartControlLayout;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
     private String babyPlayerID;
     // Activity lifecycle
@@ -119,6 +132,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         if (CookieHandler.getDefault() != DEFAULT_COOKIE_MANAGER) {
             CookieHandler.setDefault(DEFAULT_COOKIE_MANAGER);
         }
+
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
@@ -155,8 +169,16 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         debugRootView = (LinearLayout) findViewById(R.id.controls_root);
         debugTextView = (TextView) findViewById(R.id.debug_text_view);
         retryButton = (Button) findViewById(R.id.retry_button);
+        musicListView=findViewById(R.id.libraryMusicButton);
         retryButton.setOnClickListener(this);
 
+        //Müzik listesinin açılması
+        musicListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                musicListPopup();
+            }
+        });
 
 
         videoStartControlLayout = findViewById(R.id.video_start_control_layout);
@@ -497,5 +519,49 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         //String URL = "http://192.168.1.34:5080/vod/streams/test_adaptive.m3u8";
         initializePlayer(URL);
         videoStartControlLayout.setVisibility(View.GONE);
+    }
+    //Müzik için
+    public void musicListPopup(){
+        firebaseAuth=FirebaseAuth.getInstance();
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference().child("Users").child(userID);
+
+
+        ArrayList<String> songsList=new ArrayList<>();
+        databaseReference.child("Musics").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                        songsList.add(dataSnapshot.getKey());
+
+                    }
+                    final Dialog dialog=new Dialog(ParentActivity.this);
+                    dialog.setContentView(R.layout.musiclist_popup);
+                    final RecyclerView recyclerViewMusic=dialog.findViewById(R.id.musicRecyclerView);
+                    final ImageButton imageButtonClose=dialog.findViewById(R.id.imageButtonClose);
+                    MusicListAdapter musicListAdapter=new MusicListAdapter(songsList,getApplicationContext());
+                    recyclerViewMusic.setAdapter(musicListAdapter);
+
+                    RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getApplicationContext());
+                    recyclerViewMusic.setLayoutManager(layoutManager);
+
+                    dialog.show();
+
+
+                    imageButtonClose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            dialog.dismiss();
+                        }
+                    });
+
+                }
+            }
+        });
+
+
     }
 }

@@ -1,14 +1,19 @@
 package com.example.bambinobabymonitor.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.bambinobabymonitor.R;
+import com.example.bambinobabymonitor.activities.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +66,19 @@ public class getstarted4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_getstarted4, container, false);
+
+        View rootView=inflater.inflate(R.layout.fragment_getstarted4,container,false);
+
+        ImageView imageViewNext=rootView.findViewById(R.id.nextButton4);
+
+
+        imageViewNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        return rootView;
     }
 }

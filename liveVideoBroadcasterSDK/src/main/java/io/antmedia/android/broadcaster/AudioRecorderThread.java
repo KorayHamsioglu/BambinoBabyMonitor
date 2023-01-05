@@ -59,7 +59,7 @@ class AudioRecorderThread extends Thread {
 
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference();
+        databaseReference=firebaseDatabase.getReference("Users");
 
         MediaRecorder mediaRecorder=new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -78,57 +78,80 @@ class AudioRecorderThread extends Thread {
 
         int environmentVoice = 0;
         int babyVoice = 0;
-        int j=0;
-        int k=0;
-
+        boolean isCrying = false;
+        int environmentVoiceCount = 0;
+        int babyVoiceCount = 0;
+        boolean isFirst = true;
+        int outerCount = 0;
         int i = 0;
         byte[] data;
+
+
         while ((bufferReadResult = audioRecord.read(audioData[i], 0, audioData[i].length)) > 0) {
-            if (j < 100){
+            if (environmentVoiceCount < 100) {
                 environmentVoice += mediaRecorder.getMaxAmplitude();
-            }else if(j == 100 ){
+                environmentVoiceCount++;
+            } else if (environmentVoiceCount == 100) {
                 environmentVoice /= 100;
-                System.out.println("OrtamSESİ :" +environmentVoice);
-            }
-
-
-            if(k < 200){
-                babyVoice += mediaRecorder.getMaxAmplitude();
-            }else if(k == 200){
-                babyVoice /= 200;
-                if(environmentVoice + 4000 < babyVoice){
-                    //TODO: Push Notification!
-                    System.out.println("Uyarı!");
-                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("uyari");
-                }else{
-                    databaseReference.child("message").child(firebaseAuth.getCurrentUser().getUid()).child("icerik").setValue("yok");
+                System.out.println("The Environment Voice: " + environmentVoice);
+                environmentVoiceCount++;
+            } else {
+                if (babyVoiceCount < 200) {
+                    babyVoice += mediaRecorder.getMaxAmplitude();
+                    babyVoiceCount++;
+                } else if (babyVoiceCount == 200) {
+                    babyVoice /= 200;
+                    if (environmentVoice + 1000 < babyVoice) {
+                        System.out.println("Kontrol1");
+                        databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
+                        isCrying = true;
+                    } else {
+                        System.out.println("Kontrol2");
+                        databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(false);
+                        isCrying = false;
+                    }
+                    babyVoice = 0;
+                    babyVoiceCount++;
+                } else if (babyVoiceCount < 400) {
+                    babyVoice += mediaRecorder.getMaxAmplitude();
+                    babyVoiceCount++;
+                } else if (babyVoiceCount == 400) {
+                    babyVoice /= 200;
+                    if (!isCrying) {
+                        if (environmentVoice + 1000 < babyVoice) {
+                            System.out.println("Kontrol3");
+                            databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
+                        }
+                    }
+                    babyVoice = 0;
+                    babyVoiceCount = 0;
                 }
-                k = 0;
-                babyVoice = 0;
+                outerCount++;
+                if (outerCount == 1700) {
+                    outerCount = 0;
+                    babyVoice = 0;
+                    babyVoiceCount = 0;
+                    environmentVoice = 0;
+                    environmentVoiceCount = 0;
+                }
+
+
+                data = audioData[i];
+                Message msg = Message.obtain(audioHandler, AudioHandler.RECORD_AUDIO, data);
+                msg.arg1 = bufferReadResult;
+                msg.arg2 = (int) (System.currentTimeMillis() - startTime);
+                audioHandler.sendMessage(msg);
+                i++;
+                if (i == 1000) {
+                    i = 0;
+                }
+                if (stopThread) {
+                    break;
+                }
             }
-            data = audioData[i];
 
-
-
-            Message msg = Message.obtain(audioHandler, AudioHandler.RECORD_AUDIO, data);
-            msg.arg1 = bufferReadResult;
-            msg.arg2 = (int)(System.currentTimeMillis() - startTime);
-            audioHandler.sendMessage(msg);
-
-
-            i++;
-            if (i == 1000) {
-                i = 0;
-            }
-            if (stopThread) {
-                break;
-            }
-            j++;
-            k++;
+            Log.d(TAG, "AudioThread Finished, release audioRecord");
         }
-
-        Log.d(TAG, "AudioThread Finished, release audioRecord");
-
     }
 
     public void stopAudioRecording() {

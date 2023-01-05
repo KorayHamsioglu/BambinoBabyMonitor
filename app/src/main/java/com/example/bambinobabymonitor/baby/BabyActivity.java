@@ -3,8 +3,10 @@ package com.example.bambinobabymonitor.baby;
 import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_URL;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,8 +18,11 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
@@ -25,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -35,11 +41,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bambinobabymonitor.AudioModel;
 import com.example.bambinobabymonitor.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,7 +61,10 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -83,6 +94,10 @@ public class BabyActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
     private String parentPlayerID;
+    private MediaPlayer mediaPlayer;
+
+
+
 
 
 
@@ -132,47 +147,84 @@ public class BabyActivity extends AppCompatActivity {
         String userID = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("message").child(userID);
+
+        //Müzik için
+        if (!checkPermissionReadStorage()){
+            requestPermission();
+
+        }
+        addMusics();
+
+        mediaPlayer=new MediaPlayer();
+
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
-        //System.out.println(OneSignal.getDeviceState().getUserId());
+        DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+        documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
 
+        databaseReference=firebaseDatabase.getReference("Users").child(userID);
 
-         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-
-         documentReference.update("babyPlayerID",OneSignal.getDeviceState());
-
+        databaseReference.child("command_music_play").setValue("none");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String, Object> hashMap= (HashMap<String, Object>) snapshot.getValue();
+                String commandMusicPlay= (String) hashMap.get("command_music_play");
+                Boolean commandVoice= (Boolean) hashMap.get("command_voice");
+                String commandRecord= (String) hashMap.get("command_record");
 
-                for(DataSnapshot ds: snapshot.getChildren()){
-                    String komut= (String) ds.getValue();
-                    if (komut.equals("uyari")){
-                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    DocumentSnapshot documentSnapshot=task.getResult();
-                                    if(documentSnapshot.exists()){
-                                        parentPlayerID=documentSnapshot.getString("parentPlayerID");
+                databaseReference.child("Musics").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                                    if (commandMusicPlay.equals(dataSnapshot.getKey())){
 
+                                        if(mediaPlayer.isPlaying()){
+                                            mediaPlayer.stop();
+                                        }
+                                        mediaPlayer.reset();
                                         try {
-                                            OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebeğiniz Ağlıyor!'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
-                                        } catch (JSONException e) {
+                                            mediaPlayer.setDataSource((String) dataSnapshot.getValue());
+                                            mediaPlayer.prepare();
+                                            mediaPlayer.start();
+                                        } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                     }
                                 }
-                            }
-                        });
-                    }
-                    Toast.makeText(BabyActivity.this, "Komut:" + komut, Toast.LENGTH_SHORT).show();
-                }
+                                if (commandMusicPlay.equals("none")){
+                                    if (mediaPlayer.isPlaying()){
+                                        mediaPlayer.stop();
+                                    }
+                                }
 
+                            }
+                    }
+                });
+
+                if (commandVoice){
+                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot documentSnapshot=task.getResult();
+                                if(documentSnapshot.exists()){
+                                    parentPlayerID=documentSnapshot.getString("parentPlayerID");
+
+                                    try {
+                                        OneSignal.postNotification(new JSONObject("{'contents':{'en': 'Bebeğiniz Ağlıyor!'}, 'include_player_ids': ['"+parentPlayerID+"']}"),null);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             }
 
             @Override
@@ -180,9 +232,6 @@ public class BabyActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
 
 
@@ -222,8 +271,18 @@ public class BabyActivity extends AppCompatActivity {
         super.onStart();
         //this lets activity bind
         bindService(mLiveVideoBroadcasterServiceIntent, mConnection, 0);
+    }
 
-
+    boolean checkPermissionReadStorage(){
+        int result= ContextCompat.checkSelfPermission(BabyActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE);
+        if(result== PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    void requestPermission(){
+        ActivityCompat.requestPermissions(BabyActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
     }
 
     @Override
@@ -491,5 +550,30 @@ public class BabyActivity extends AppCompatActivity {
         }
 
         return String.valueOf(number);
+    }
+    //Müzik ekleme realtimeDatabase
+    public void addMusics(){
+
+        firebaseAuth=FirebaseAuth.getInstance();
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Users").child(userID);
+
+        String[] projection={
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DURATION,
+        };
+
+        String selection=MediaStore.Audio.Media.IS_MUSIC+"!=0";
+        int i=1;
+        Cursor cursor=getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,null);
+        while(cursor.moveToNext()){
+            AudioModel songData=new AudioModel(cursor.getString(1),cursor.getString(0),cursor.getString(2));
+            if(new File(songData.getPath()).exists()){
+               databaseReference.child("Musics").child(songData.getTitle()).setValue(songData.getPath());
+            }
+            i++;
+        }
     }
 }
