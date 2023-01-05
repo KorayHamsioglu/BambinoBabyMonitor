@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,8 +18,11 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
@@ -26,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bambinobabymonitor.AudioModel;
 import com.example.bambinobabymonitor.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,6 +61,8 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
@@ -86,6 +94,10 @@ public class BabyActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
     private String parentPlayerID;
+    private MediaPlayer mediaPlayer;
+
+
+
 
 
 
@@ -136,6 +148,16 @@ public class BabyActivity extends AppCompatActivity {
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
 
+        //Müzik için
+        if (!checkPermissionReadStorage()){
+            requestPermission();
+
+        }
+        addMusics();
+
+        mediaPlayer=new MediaPlayer();
+
+
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
@@ -144,6 +166,8 @@ public class BabyActivity extends AppCompatActivity {
 
         databaseReference=firebaseDatabase.getReference("Users").child(userID);
 
+        databaseReference.child("command_music_play").setValue("none");
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -151,6 +175,36 @@ public class BabyActivity extends AppCompatActivity {
                 String commandMusicPlay= (String) hashMap.get("command_music_play");
                 Boolean commandVoice= (Boolean) hashMap.get("command_voice");
                 String commandRecord= (String) hashMap.get("command_record");
+
+                databaseReference.child("Musics").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()){
+                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                                    if (commandMusicPlay.equals(dataSnapshot.getKey())){
+
+                                        if(mediaPlayer.isPlaying()){
+                                            mediaPlayer.stop();
+                                        }
+                                        mediaPlayer.reset();
+                                        try {
+                                            mediaPlayer.setDataSource((String) dataSnapshot.getValue());
+                                            mediaPlayer.prepare();
+                                            mediaPlayer.start();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                if (commandMusicPlay.equals("none")){
+                                    if (mediaPlayer.isPlaying()){
+                                        mediaPlayer.stop();
+                                    }
+                                }
+
+                            }
+                    }
+                });
 
                 if (commandVoice){
                     documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -217,8 +271,18 @@ public class BabyActivity extends AppCompatActivity {
         super.onStart();
         //this lets activity bind
         bindService(mLiveVideoBroadcasterServiceIntent, mConnection, 0);
+    }
 
-
+    boolean checkPermissionReadStorage(){
+        int result= ContextCompat.checkSelfPermission(BabyActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE);
+        if(result== PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    void requestPermission(){
+        ActivityCompat.requestPermissions(BabyActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
     }
 
     @Override
@@ -486,5 +550,30 @@ public class BabyActivity extends AppCompatActivity {
         }
 
         return String.valueOf(number);
+    }
+    //Müzik ekleme realtimeDatabase
+    public void addMusics(){
+
+        firebaseAuth=FirebaseAuth.getInstance();
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Users").child(userID);
+
+        String[] projection={
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DURATION,
+        };
+
+        String selection=MediaStore.Audio.Media.IS_MUSIC+"!=0";
+        int i=1;
+        Cursor cursor=getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,null);
+        while(cursor.moveToNext()){
+            AudioModel songData=new AudioModel(cursor.getString(1),cursor.getString(0),cursor.getString(2));
+            if(new File(songData.getPath()).exists()){
+               databaseReference.child("Musics").child(songData.getTitle()).setValue(songData.getPath());
+            }
+            i++;
+        }
     }
 }
