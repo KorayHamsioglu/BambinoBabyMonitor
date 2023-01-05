@@ -6,10 +6,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.adapters.ViewPagerAdapter;
@@ -26,6 +28,8 @@ public class WelcomeActivity extends AppCompatActivity {
     ViewPagerAdapter viewPagerAdapter;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    TextView skipTextView;
+    Button getStartedButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,8 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(view);
         tabLayout = findViewById(R.id.tabs);
         viewPager2 = findViewById(R.id.viewPager);
+        skipTextView = findViewById(R.id.skipTextView);
+        getStartedButton = findViewById(R.id.getStartedButton);
         viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager2.setAdapter(viewPagerAdapter);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -49,5 +55,19 @@ public class WelcomeActivity extends AppCompatActivity {
                 // TODO: Koray (Back - Next Button in Fragments!)
             }
         }).attach();
+        skipTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToLoginActivity = new Intent(WelcomeActivity.this,LoginActivity.class);
+                startActivity(intentToLoginActivity);
+            }
+        });
+        skipTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToLoginActivity = new Intent(WelcomeActivity.this,LoginActivity.class);
+                startActivity(intentToLoginActivity);
+            }
+        });
     }
 }
