@@ -1,15 +1,32 @@
 <resources>
-    <string name="app_name">BambinoBabyMonitor</string>
-
+    <string name="app_name">Bambino</string>
+    <string name="app">Baby Monitor</string>
     <string name="set_phone">Set Phone for the </string>
     <string name="fragment_1_title">WELCOME!</string>
-    <string name="fragment_1_context">You Can Monitor Your Baby Using Two Phones. Turn Your Smartphones Into Baby Monitors.</string>
+    <string name="fragment_1_context">You Can Monitor Your Baby Using Two Phones. Turn Your Smartphones Into Baby Monitors!</string>
     <string name="fragment_2_title">STEP 1: Mail</string>
     <string name="fragment_2_context">Log In The Both The Baby Phone And The Parent Phone On The Same Email. </string>
     <string name="fragment_3_title">STEP 2: Set Baby Phone</string>
     <string name="fragment_3_context">Start A Broadcast With A Clear View Of The Baby. Make Sure You Have Internet.</string>
     <string name="fragment_4_title">STEP 3: Set Parent Phone</string>
     <string name="fragment_4_context">Join The Broadcast. Stay Close To Your Baby Wherever You Are!</string>
+    <string name="login_head">Login</string>
+    <string name="skip"><u>Skip</u></string>
+    <string name="get_started">Get Started!</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Email</string>
+    <string name="login">LOGIN</string>
+    <string name="account">Don\'t have an account?  </string>
+    <string name="sign_up"><u>Sign Up!</u></string>
+    <string name="register">Register</string>
+    <string name="register_button">REGISTER</string>
+    <string name="register_account">Do you already have an account?   </string>
+    <string name="sign_in"><u>Sign In</u></string>
+    <string name="check"> I have read and approve <u>the Terms of Use Agreement.</u></string>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

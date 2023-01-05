@@ -49,16 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseFirestore=FirebaseFirestore.getInstance();
 
-        activityRegisterBinding.buttonRegisterBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
-               startActivity(intent);
-               finish();
-            }
-        });
-
-
         activityRegisterBinding.buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

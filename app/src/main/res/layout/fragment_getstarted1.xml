@@ -2,20 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
     tools:context=".fragments.getstarted1"
     android:orientation="vertical"
-    android:gravity="center"
-
     >
 
     <!-- TODO: Update blank fragment layout -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp"></Space>
     <TextView
         android:id="@+id/textViewWelcome"
-        android:layout_width="350dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="370dp"
-        android:textSize="27dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/baby_lilac_bold"
         android:text="@string/fragment_1_title"
@@ -25,40 +29,18 @@
 
     <TextView
         android:id="@+id/textViewWelcomeContent"
-        android:layout_width="350dp"
-        android:layout_margin="20dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="19dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft ="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="16dp"
         android:textColor="@color/baby_lilac_bold"
         android:text="@string/fragment_1_context"
-        android:textAlignment="center"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_height="55dp">
-        <ImageView
-            android:id="@+id/beforeButton1"
-            android:layout_width="39dp"
-            android:layout_height="50dp"
-            android:visibility="invisible"
-            android:src="@drawable/before"></ImageView>
-        <ImageView
-            android:layout_width="50dp"
-            android:id="@+id/nextButton1"
-            android:layout_marginLeft="250dp"
-            android:src="@drawable/next"
-            android:visibility="invisible"
-            android:layout_height="50dp">
-        </ImageView>
-    </LinearLayout>
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp">
+        android:textAlignment="center">
+    </TextView>
 
-    </Space>
 
 
 
