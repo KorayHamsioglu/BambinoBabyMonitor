@@ -3,9 +3,11 @@ package com.example.bambinobabymonitor.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.bambinobabymonitor.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +28,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
+
+        activityLoginBinding.editTextPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
+
+        activityLoginBinding.editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
         if(firebaseUser!=null){
             Intent intent=new Intent(LoginActivity.this,OnlineActivity.class);
             startActivity(intent);
@@ -66,5 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

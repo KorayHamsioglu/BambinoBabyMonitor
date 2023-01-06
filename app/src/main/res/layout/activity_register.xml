@@ -7,6 +7,8 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="20dp"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     tools:context=".activities.RegisterActivity">
 
     <ImageView
@@ -29,19 +31,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:textColor="#cf6e48"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="18sp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/secondary_button_background_2"
         android:ems="10"
-        android:textStyle="bold"
-        android:paddingLeft="10dp"
+        android:hint="E-mail"
         android:inputType="textEmailAddress"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="#cf6e48"
         android:textColorHint="#cf6e48"
-        android:hint="E-mail" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/textViewError1"
         android:layout_width="match_parent"
@@ -137,7 +139,8 @@
         <CheckBox
             android:id="@+id/registerCheckBox"
             android:layout_width="wrap_content"
-            android:drawableStart = "@drawable/checkbox"
+            android:background="@drawable/checkbox"
+
             android:layout_height="wrap_content">
         </CheckBox>
         <TextView

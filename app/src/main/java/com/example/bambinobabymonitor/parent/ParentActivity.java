@@ -146,7 +146,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
 
         documentReference.update("parentPlayerID",OneSignal.getDeviceState().getUserId());
 
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+       /* documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
@@ -161,7 +161,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             }
-        });
+        });*/
 
         setContentView(R.layout.activity_parent);
         View rootView = findViewById(R.id.root);

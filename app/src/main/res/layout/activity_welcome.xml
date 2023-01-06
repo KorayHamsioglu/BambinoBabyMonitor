@@ -16,18 +16,17 @@
         android:textSize="14sp"
         android:layout_margin="10dp"
         android:layout_height="30dp"></TextView>
+
     <TextView
-        android:layout_height="60sp"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/app_name"
-        android:textSize="56sp"
-        android:textStyle="normal"
-        android:fontFamily="@font/dream"
-        android:textColor="@color/baby_yellow"
         android:layout_marginTop="120dp"
-        >
-    </TextView>
+        android:fontFamily="@font/dream"
+        android:text="@string/app_name"
+        android:textColor="@color/baby_yellow"
+        android:textSize="56sp"
+        android:textStyle="normal"></TextView>
     <TextView
         android:layout_width="wrap_content"
         android:layout_gravity="center"

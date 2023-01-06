@@ -63,12 +63,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(intentToLoginActivity);
             }
         });
-        skipTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentToLoginActivity = new Intent(WelcomeActivity.this,LoginActivity.class);
-                startActivity(intentToLoginActivity);
-            }
-        });
+
     }
 }

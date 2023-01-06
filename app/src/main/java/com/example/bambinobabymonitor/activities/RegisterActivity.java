@@ -3,6 +3,7 @@ package com.example.bambinobabymonitor.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.example.bambinobabymonitor.R;
@@ -48,6 +50,31 @@ public class RegisterActivity extends AppCompatActivity {
 
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseFirestore=FirebaseFirestore.getInstance();
+
+        activityRegisterBinding.editTextRegisterEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
+        activityRegisterBinding.editTextRegisterPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
+        activityRegisterBinding.editTextRegisterRePassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
 
         activityRegisterBinding.buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,5 +188,10 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
         }
 
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
