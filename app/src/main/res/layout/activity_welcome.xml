@@ -5,49 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/welcome_background"
+    android:background="@color/white"
     tools:context=".activities.WelcomeActivity">
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+    </Space>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="500dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:id="@+id/skipTextView"
         android:text="@string/skip"
         android:layout_gravity="end"
-        android:textColor="@color/baby_blue_green"
+        android:textColor="@color/baby_lilac_bold"
         android:textSize="14sp"
-        android:layout_margin="10dp"
-        android:layout_height="30dp"></TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="120dp"
-        android:fontFamily="@font/dream"
-        android:text="@string/app_name"
-        android:textColor="@color/baby_yellow"
-        android:textSize="56sp"
-        android:textStyle="normal"></TextView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/app"
-        android:textSize="24sp"
-        android:textColor="@color/baby_yellow"
-        android:layout_height="wrap_content">
-    </TextView>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="230dp" />
+        android:layout_marginRight="10dp"
+        android:layout_height="20dp"></TextView>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         app:tabBackground="@drawable/dot"
         app:tabGravity="center"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
         android:paddingStart="6dp"
         android:paddingEnd="6dp"
         android:layout_height="10dp"
@@ -74,7 +60,6 @@
 
         </com.google.android.material.tabs.TabItem>
     </com.google.android.material.tabs.TabLayout>
-
 
 
 

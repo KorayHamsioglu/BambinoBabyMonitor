@@ -22,6 +22,13 @@
     <string name="sign_up"><u>Üye Ol!</u></string>
     <string name="register">Üye Girişi</string>
     <string name="register_button">Üye ol</string>
+    <string name="mail_does_not_exist">Bu mail adresi bulunmamaktadır!</string>
+    <string name="password_not_match">Şifreler eşleşmemektedir!</string>
+    <string name="valid_email">Lütfen geçerli bir mail adresi giriniz!</string>
+    <string name="valid_password">Lütfen geçerli bir şifre giriniz!</string>
+    <string name="verify">Doğrulama maili gönderildi. Lütfen giriş yapmadan önce doğrulayın!</string>
+    <string name="ok">Tamam</string>
+    <string name="the_mail_is_already_registered">Bu e-posta adresi daha önce kullanılmış!</string>
     <string name="register_account">Zaten bir hesabınız var mı?  </string>
     <string name="sign_in"><u>Giriş Yap</u></string>
     <string name="check"><u> Kullanım Sözleşmesi</u>\'ni okudum onaylıyorum.</string>
