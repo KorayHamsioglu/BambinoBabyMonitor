@@ -73,6 +73,8 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:ems="10"
+        android:textColor="@color/red"
+        android:visibility="invisible"
         android:paddingLeft="10dp" />
 
     <Button

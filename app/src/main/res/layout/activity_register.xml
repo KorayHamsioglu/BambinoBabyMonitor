@@ -141,6 +141,7 @@
             android:id="@+id/registerCheckBox"
             android:layout_width="wrap_content"
             android:background="@drawable/checkbox"
+            android:button="@null"
             android:layout_height="wrap_content">
         </CheckBox>
         <TextView

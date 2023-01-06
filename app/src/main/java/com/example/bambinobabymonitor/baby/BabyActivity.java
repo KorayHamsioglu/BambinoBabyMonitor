@@ -456,7 +456,7 @@ public class BabyActivity extends AppCompatActivity {
 
     public void triggerStopRecording() {
         if (mIsRecording) {
-            mBroadcastControlButton.setColorFilter(getResources().getColor(R.color.baby_blue_green));
+            mBroadcastControlButton.setColorFilter(getResources().getColor(R.color.green));
 
             mStreamLiveStatus.setVisibility(View.GONE);
             mStreamLiveStatus.setText("R.string.live_indicator");

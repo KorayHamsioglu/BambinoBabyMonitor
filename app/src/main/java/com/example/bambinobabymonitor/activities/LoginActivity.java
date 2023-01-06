@@ -64,28 +64,34 @@ public class LoginActivity extends AppCompatActivity {
                 String email=activityLoginBinding.editTextEmail.getText().toString();
                 String password=activityLoginBinding.editTextPassword.getText().toString();
                 activityLoginBinding.textViewErrorLogin.setVisibility(View.INVISIBLE);
-                firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            FirebaseUser firebaseUser= firebaseAuth.getCurrentUser();
-                            if(firebaseUser.isEmailVerified()){
-                                startActivity(new Intent(LoginActivity.this,OnlineActivity.class));
-                                finish();
-                            }
-                            else{
-                                activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                                activityLoginBinding.textViewErrorLogin.setText("Lütfen hesabınızı onayladıktan sonra giriş yapınız.");
-                            }
 
-                        }else{
-                            activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                            activityLoginBinding.textViewErrorLogin.setText("E-mail veya şifre hatalı.");
+                if(!email.equals("") && !password.equals("")) {
+                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                if (firebaseUser.isEmailVerified()) {
+                                    startActivity(new Intent(LoginActivity.this, OnlineActivity.class));
+                                    finish();
+                                } else {
+                                    activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                                    activityLoginBinding.textViewErrorLogin.setText("Lütfen hesabınızı onayladıktan sonra giriş yapınız.");
+                                }
+
+                            } else {
+                                activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                                activityLoginBinding.textViewErrorLogin.setText("E-mail veya şifre hatalı.");
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                    activityLoginBinding.textViewErrorLogin.setText("HATA");
+                }
             }
         });
+
     }
 
     public void hideKeyboard(View view) {
