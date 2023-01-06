@@ -1,46 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    tools:context=".fragments.getstarted3"
+    android:background="@color/white"
     android:orientation="vertical"
-    >
-
-    <!-- TODO: Update blank fragment layout -->
-    <Space
+    tools:context=".fragments.getstarted1">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"></Space>
-    <TextView
-        android:id="@+id/textViewWelcome"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_height="150dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:src="@drawable/baby"
+            android:layout_height="match_parent">
+
+        </ImageView>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/baby_lilac_bold"
-        android:text="@string/fragment_3_title"
-        android:textAlignment="center"
+        android:background="@drawable/pink_back"
+        android:orientation="vertical"
+        android:layout_height="330dp">
+        <TextView
+            android:layout_marginTop="45dp"
+            android:id="@+id/textViewWelcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="@string/fragment_3_title"
+            android:textAlignment="center"
+            android:textColor="@color/baby_lilac_bold"
+            android:textSize="24sp"
+            android:textStyle="bold"
 
-        />
+            />
 
-    <TextView
-        android:id="@+id/textViewWelcomeContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft ="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_gravity="center"
-        android:textSize="16dp"
-        android:textColor="@color/baby_lilac_bold"
-        android:text="@string/fragment_3_context"
-        android:textAlignment="center">
-    </TextView>
+        <TextView
+            android:id="@+id/textViewWelcomeContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="15dp"
+            android:text="@string/fragment_3_context"
+            android:textAlignment="center"
+            android:textColor="@color/baby_lilac_bold"
+            android:textSize="16dp"></TextView>
 
+
+
+
+    </LinearLayout>
 
 
 

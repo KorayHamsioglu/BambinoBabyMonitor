@@ -86,14 +86,14 @@ public class RegisterActivity extends AppCompatActivity {
                        @Override
                        public void onFailure(@NonNull Exception e) {
                            activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                           activityRegisterBinding.textViewError1.setText("Girdiğiniz mail adresi bulunmamaktadır");
+                           activityRegisterBinding.textViewError1.setText("@string/mail_does_not_exist");
                            firebaseAuth.getCurrentUser().delete();
                        }
                    });
 
                }else{
                    activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                   activityRegisterBinding.textViewError1.setText("Girdiğiniz mail adresi daha önce kullanılmış");
+                   activityRegisterBinding.textViewError1.setText("@string/the_mail_is_already_registered");
                }
 
            }
@@ -101,21 +101,21 @@ public class RegisterActivity extends AppCompatActivity {
    }
    else if(isValidEmail(email)&& isValidPassword(password) && !password.equals(rePassword)){
         activityRegisterBinding.textViewError3.setVisibility(View.VISIBLE);
-        activityRegisterBinding.textViewError3.setText("Şifreler eşleşmiyor.");
+        activityRegisterBinding.textViewError3.setText("@string/password_not_match");
    }
    else if(!isValidEmail(email)&& isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError1.setText("Lütfen geçerli bir mail adresi giriniz.");
+       activityRegisterBinding.textViewError1.setText("@string/valid_email");
    }
    else if(isValidEmail(email)&& !isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError2.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError2.setText("Lütfen geçerli bir şifre giriniz.");
+       activityRegisterBinding.textViewError2.setText("@string/valid_password");
    }
    else if(!isValidEmail(email)&& !isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError1.setText("Lütfen geçerli bir mail adresi giriniz.");
+       activityRegisterBinding.textViewError1.setText("@string/valid_mail");
        activityRegisterBinding.textViewError2.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError2.setText("Lütfen geçerli bir şifre giriniz.");
+       activityRegisterBinding.textViewError2.setText("@string/valid_password");
    }
             }
         });
@@ -137,8 +137,6 @@ public class RegisterActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.show();
-
-
     }
 
     public boolean isValidEmail(CharSequence text){
