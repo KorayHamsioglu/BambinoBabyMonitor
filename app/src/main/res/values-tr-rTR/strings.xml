@@ -20,7 +20,7 @@
     <string name="account">Hesabınız yok mu?  </string>
     <string name="login">Giriş</string>
     <string name="sign_up"><u>Üye Ol!</u></string>
-    <string name="register">Üye Girişi</string>
+    <string name="register">Üye Olma</string>
     <string name="register_button">Üye ol</string>
     <string name="mail_does_not_exist">Bu mail adresi bulunmamaktadır!</string>
     <string name="password_not_match">Şifreler eşleşmemektedir!</string>
@@ -32,6 +32,10 @@
     <string name="register_account">Zaten bir hesabınız var mı?  </string>
     <string name="sign_in"><u>Giriş Yap</u></string>
     <string name="check"><u> Kullanım Sözleşmesi</u>\'ni okudum onaylıyorum.</string>
+    <string name="verify_error">Lütfen hesabınızı doğruladıktan sonra giriş yapın.</string>
+    <string name="email_password_error">Email ya da şifreniz hatalı.</string>
+
+
 
 
 

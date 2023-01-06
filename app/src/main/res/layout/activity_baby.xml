@@ -38,7 +38,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
-
             android:onClick="showSetResolutionDialog"
             android:src="@drawable/icon_settings_foreground"
             />
@@ -89,8 +88,8 @@
 
         <ImageButton
             android:id="@+id/toggle_broadcasting"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_baseline_fiber_manual_record_24"
             style="?attr/borderlessButtonStyle"
             android:onClick="toggleBroadcasting"

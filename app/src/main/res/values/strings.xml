@@ -30,6 +30,8 @@
     <string name="ok">OK</string>
     <string name="verify">Verification mail has been sent. Please verify before login!</string>
     <string name="check"> I have read and approve <u>the Terms of Use Agreement.</u></string>
+    <string name="verify_error">Please login after verify your account.</string>
+    <string name="email_password_error">Email or password is not correct.</string>
 
 
 

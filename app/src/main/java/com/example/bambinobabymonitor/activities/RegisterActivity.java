@@ -82,7 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String email=activityRegisterBinding.editTextRegisterEmail.getText().toString();
                 String password=activityRegisterBinding.editTextRegisterPassword.getText().toString();
                 String rePassword=activityRegisterBinding.editTextRegisterRePassword.getText().toString();
-
                 activityRegisterBinding.textViewError1.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError2.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError3.setVisibility(View.INVISIBLE);
