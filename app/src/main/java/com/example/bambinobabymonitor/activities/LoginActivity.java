@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,12 +56,12 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             else{
                                 activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                                activityLoginBinding.textViewErrorLogin.setText("Lütfen hesabınızı onayladıktan sonra giriş yapınız.");
+                                activityLoginBinding.textViewErrorLogin.setText(R.string.verify_error);
                             }
 
                         }else{
                             activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                            activityLoginBinding.textViewErrorLogin.setText("E-mail veya şifre hatalı.");
+                            activityLoginBinding.textViewErrorLogin.setText(R.string.email_password_error);
                         }
                     }
                 });

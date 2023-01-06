@@ -70,8 +70,6 @@ public class getstarted4 extends Fragment {
         View rootView=inflater.inflate(R.layout.fragment_getstarted4,container,false);
 
         Button imageViewNext=rootView.findViewById(R.id.getStartedButton);
-
-
         imageViewNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

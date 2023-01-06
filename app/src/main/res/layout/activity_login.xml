@@ -67,16 +67,17 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:textStyle="bold"
-        android:textSize="18sp"
+        android:textColor="@color/red"
+        android:textSize="12sp"
         android:ems="10"
         android:paddingLeft="10dp" />
 
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:paddingTop="0dp"

@@ -55,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String email=activityRegisterBinding.editTextRegisterEmail.getText().toString();
                 String password=activityRegisterBinding.editTextRegisterPassword.getText().toString();
                 String rePassword=activityRegisterBinding.editTextRegisterRePassword.getText().toString();
-
                 activityRegisterBinding.textViewError1.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError2.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError3.setVisibility(View.INVISIBLE);
@@ -86,14 +85,14 @@ public class RegisterActivity extends AppCompatActivity {
                        @Override
                        public void onFailure(@NonNull Exception e) {
                            activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                           activityRegisterBinding.textViewError1.setText("@string/mail_does_not_exist");
+                           activityRegisterBinding.textViewError1.setText(R.string.mail_does_not_exist);
                            firebaseAuth.getCurrentUser().delete();
                        }
                    });
 
                }else{
                    activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                   activityRegisterBinding.textViewError1.setText("@string/the_mail_is_already_registered");
+                   activityRegisterBinding.textViewError1.setText(R.string.the_mail_is_already_registered);
                }
 
            }
@@ -101,21 +100,21 @@ public class RegisterActivity extends AppCompatActivity {
    }
    else if(isValidEmail(email)&& isValidPassword(password) && !password.equals(rePassword)){
         activityRegisterBinding.textViewError3.setVisibility(View.VISIBLE);
-        activityRegisterBinding.textViewError3.setText("@string/password_not_match");
+        activityRegisterBinding.textViewError3.setText(R.string.password_not_match);
    }
    else if(!isValidEmail(email)&& isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError1.setText("@string/valid_email");
+       activityRegisterBinding.textViewError1.setText(R.string.valid_email);
    }
    else if(isValidEmail(email)&& !isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError2.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError2.setText("@string/valid_password");
+       activityRegisterBinding.textViewError2.setText(R.string.valid_password);
    }
    else if(!isValidEmail(email)&& !isValidPassword(password) && password.equals(rePassword)){
        activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError1.setText("@string/valid_mail");
+       activityRegisterBinding.textViewError1.setText(R.string.valid_email);
        activityRegisterBinding.textViewError2.setVisibility(View.VISIBLE);
-       activityRegisterBinding.textViewError2.setText("@string/valid_password");
+       activityRegisterBinding.textViewError2.setText(R.string.valid_password);
    }
             }
         });
