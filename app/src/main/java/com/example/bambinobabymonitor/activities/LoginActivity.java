@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
-        if(firebaseUser!=null){
+        if(firebaseUser!=null && firebaseUser.isEmailVerified()){
             Intent intent=new Intent(LoginActivity.this,OnlineActivity.class);
             startActivity(intent);
             finish();
@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            FirebaseUser firebaseUser= firebaseAuth.getCurrentUser();
                             if(firebaseUser.isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this,OnlineActivity.class));
                                 finish();

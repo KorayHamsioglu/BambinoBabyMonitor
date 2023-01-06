@@ -5,9 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@drawable/wirelessactivitybackground"
-    tools:context=".activities.OfflineActivity">
+    android:background="@color/white"
+    tools:context=".activities.OnlineActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="320dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@drawable/choose_background"
+            android:layout_height="match_parent">
+        </ImageView>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView"
@@ -15,29 +24,70 @@
         android:layout_height="wrap_content"
         android:text="@string/set_phone"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="24dp"
         android:textStyle="bold"
-        android:layout_marginTop="150dp"
-        android:textColor="@color/baby_yellow"/>
+        android:textColor="#f7bfd5"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="230dp"
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:gravity="center">
+        <LinearLayout
+            android:layout_width="170dp"
+            android:orientation="vertical"
+            android:background="@drawable/child_background"
+            android:layout_height="220dp">
+            <ImageButton
+                android:id="@+id/imageButtonBaby"
+                android:layout_marginTop="20dp"
+                android:layout_width="150dp"
+                android:layout_height="170dp"
+                android:layout_gravity="center"
+                android:background="@drawable/choose_baby" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Child"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_margin="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/baby_blue_green"
+                android:layout_height="20dp">
 
-        <ImageButton
-            android:id="@+id/imageButtonParent"
-            android:layout_width="143dp"
-            android:layout_height="195dp"
-            android:background="@drawable/buttonparent" />
-        <ImageButton
-            android:id="@+id/imageButtonBaby"
-            android:layout_width="143dp"
-            android:layout_height="195dp"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/buttonbaby" />
+
+            </TextView>
+        </LinearLayout>
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="match_parent"></Space>
+        <LinearLayout
+            android:layout_width="170dp"
+            android:orientation="vertical"
+            android:background="@drawable/parent_background"
+            android:layout_height="220dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Parent"
+                android:textSize="18dp"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/baby_yellow"
+                android:layout_height="20dp">
+            </TextView>
+            <ImageButton
+                android:id="@+id/imageButtonParent"
+                android:layout_width="150dp"
+                android:layout_gravity="center"
+                android:layout_height="170dp"
+                android:background="@drawable/choose_parent" />
+        </LinearLayout>
+
+
 
 
     </LinearLayout>
