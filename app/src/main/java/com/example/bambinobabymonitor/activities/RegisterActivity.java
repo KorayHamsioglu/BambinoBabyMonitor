@@ -87,43 +87,48 @@ public class RegisterActivity extends AppCompatActivity {
                 activityRegisterBinding.textViewError3.setVisibility(View.INVISIBLE);
 
    if(isValidEmail(email)&& isValidPassword(password) && password.equals(rePassword)) {
-       firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-           @Override
-           public void onComplete(@NonNull Task<AuthResult> task) {
-               if (task.isSuccessful()) {
-                   view.setClickable(false);
-                   FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                   firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                       @Override
-                       public void onSuccess(Void unused) {
-                           userID = firebaseAuth.getCurrentUser().getUid();
-                           DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
-                           Map<String, Object> user = new HashMap<>();
-                           user.put("email", email);
-                           user.put("password", password);
-                           documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                               @Override
-                               public void onSuccess(Void unused) {
-                                   startPopup(popupView);
-                               }
-                           });
-                       }
-                   }).addOnFailureListener(new OnFailureListener() {
-                       @Override
-                       public void onFailure(@NonNull Exception e) {
-                           activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                           activityRegisterBinding.textViewError1.setText(R.string.mail_does_not_exist);
-                           firebaseAuth.getCurrentUser().delete();
-                       }
-                   });
+       if(activityRegisterBinding.registerCheckBox.isChecked()){
+           firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+               @Override
+               public void onComplete(@NonNull Task<AuthResult> task) {
+                   if (task.isSuccessful()) {
+                       view.setClickable(false);
+                       FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                       firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                           @Override
+                           public void onSuccess(Void unused) {
+                               userID = firebaseAuth.getCurrentUser().getUid();
+                               DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
+                               Map<String, Object> user = new HashMap<>();
+                               user.put("email", email);
+                               user.put("password", password);
+                               documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                   @Override
+                                   public void onSuccess(Void unused) {
+                                       startPopup(popupView);
+                                   }
+                               });
+                           }
+                       }).addOnFailureListener(new OnFailureListener() {
+                           @Override
+                           public void onFailure(@NonNull Exception e) {
+                               activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
+                               activityRegisterBinding.textViewError1.setText(R.string.mail_does_not_exist);
+                               firebaseAuth.getCurrentUser().delete();
+                           }
+                       });
 
-               }else{
-                   activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
-                   activityRegisterBinding.textViewError1.setText(R.string.the_mail_is_already_registered);
+                   }else{
+                       activityRegisterBinding.textViewError1.setVisibility(View.VISIBLE);
+                       activityRegisterBinding.textViewError1.setText(R.string.the_mail_is_already_registered);
+                   }
+
                }
+           });
+       }else{
 
-           }
-       });
+       }
+
    }
    else if(isValidEmail(email)&& isValidPassword(password) && !password.equals(rePassword)){
         activityRegisterBinding.textViewError3.setVisibility(View.VISIBLE);
@@ -150,6 +155,15 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        activityRegisterBinding.buttonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
