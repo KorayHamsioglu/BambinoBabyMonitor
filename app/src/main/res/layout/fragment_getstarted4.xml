@@ -59,13 +59,13 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="10dp"
             android:layout_gravity="center"
-            android:textColor="@color/baby_lilac_bold"
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:id="@+id/getStartedButton"
             android:text="@string/get_started"
-            android:background="@drawable/secondary_button_background_3"
+            android:background="@drawable/primary_button_background"
             android:layout_height="wrap_content">
 
         </Button>
