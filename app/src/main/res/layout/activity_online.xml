@@ -39,13 +39,6 @@
             android:orientation="vertical"
             android:background="@drawable/child_background"
             android:layout_height="220dp">
-            <ImageButton
-                android:id="@+id/imageButtonBaby"
-                android:layout_marginTop="20dp"
-                android:layout_width="150dp"
-                android:layout_height="170dp"
-                android:layout_gravity="center"
-                android:background="@drawable/choose_baby" />
             <TextView
                 android:layout_width="match_parent"
                 android:text="Child"
@@ -56,9 +49,15 @@
                 android:textAlignment="center"
                 android:textColor="@color/baby_blue_green"
                 android:layout_height="20dp">
-
-
             </TextView>
+            <ImageButton
+                android:id="@+id/imageButtonBaby"
+                android:layout_marginTop="10dp"
+                android:layout_width="150dp"
+                android:layout_height="170dp"
+                android:layout_gravity="center"
+                android:background="@drawable/choose_baby" />
+
         </LinearLayout>
         <Space
             android:layout_width="30dp"
