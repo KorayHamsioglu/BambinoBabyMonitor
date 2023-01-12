@@ -5,6 +5,7 @@ import static com.example.bambinobabymonitor.activities.MainActivity.RTMP_BASE_U
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
@@ -14,18 +15,23 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -65,6 +71,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,23 +88,35 @@ public class BabyActivity extends AppCompatActivity {
     private Timer mTimer;
     private long mElapsedTime;
     public TimerHandler mTimerHandler;
-    private ImageButton mSettingsButton;
+    private ImageView mSettingsButton,mBroadcastControlButton,mCameraButton;
     private CameraResolutionsFragment mCameraResolutionsDialog;
     private Intent mLiveVideoBroadcasterServiceIntent;
     private TextView mStreamLiveStatus;
     private GLSurfaceView mGLView;
     private ILiveVideoBroadcaster mLiveVideoBroadcaster;
-    private ImageButton mBroadcastControlButton;
      FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
     private String parentPlayerID;
+    private CoordinatorLayout coordinatorLayout;
+    boolean isCameraMuted=false;
     private MediaPlayer mediaPlayer;
 
 
-
+    private BroadcastReceiver batteryLevelReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+            firebaseAuth=FirebaseAuth.getInstance();
+            String userID=firebaseAuth.getCurrentUser().getUid();
+            firebaseDatabase=FirebaseDatabase.getInstance();
+            databaseReference=firebaseDatabase.getReference();
+            databaseReference.child("Users").child(userID).child("battery_level").setValue(level);
+            System.out.println("Battery Level: "+level+"%");
+        }
+    };
 
 
 
@@ -147,12 +166,40 @@ public class BabyActivity extends AppCompatActivity {
         String userID = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
+        mCameraButton=findViewById(R.id.camera_button);
+        coordinatorLayout=findViewById(R.id.root_layout);
+
+        this.registerReceiver(this.batteryLevelReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        Random random = new Random();
+
+
+
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    if(isCameraMuted){
+                        isCameraMuted=!isCameraMuted;
+
+                        mCameraButton.setImageResource(R.drawable.video);
+                    }else{
+                        isCameraMuted=!isCameraMuted;
+                        int cartoonChoice = random.nextInt(7);
+                        mCameraButton.setImageResource(R.drawable.no_video);
+                        mGLView.setBackground(getResources().getDrawable(R.drawable.cartoon_0 +cartoonChoice));
+                    }
+
+
+                    //coordinatorLayout.setBackground();
+
+
+
+            }
+        });
 
         //Müzik için
-        if (!checkPermissionReadStorage()){
-            requestPermission();
 
-        }
         addMusics();
 
         mediaPlayer=new MediaPlayer();
@@ -246,10 +293,10 @@ public class BabyActivity extends AppCompatActivity {
 
 
         mRootView = (ViewGroup)findViewById(R.id.root_layout);
-        mSettingsButton = (ImageButton)findViewById(R.id.settings_button);
+        mSettingsButton = (ImageView)findViewById(R.id.settings_button);
         mStreamLiveStatus = (TextView) findViewById(R.id.stream_live_status);
 
-        mBroadcastControlButton = (ImageButton) findViewById(R.id.toggle_broadcasting);
+        mBroadcastControlButton = (ImageView) findViewById(R.id.toggle_broadcasting);
 
 
         // Configure the GLSurfaceView.  This will start the Renderer thread, with an
@@ -273,18 +320,6 @@ public class BabyActivity extends AppCompatActivity {
         bindService(mLiveVideoBroadcasterServiceIntent, mConnection, 0);
     }
 
-    boolean checkPermissionReadStorage(){
-        int result= ContextCompat.checkSelfPermission(BabyActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE);
-        if(result== PackageManager.PERMISSION_GRANTED){
-            return true;
-        }else {
-            return false;
-        }
-    }
-    void requestPermission(){
-        ActivityCompat.requestPermissions(BabyActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -299,12 +334,15 @@ public class BabyActivity extends AppCompatActivity {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             Manifest.permission.CAMERA) ||
                             ActivityCompat.shouldShowRequestPermissionRationale(this,
-                                    Manifest.permission.RECORD_AUDIO)) {
+                                    Manifest.permission.RECORD_AUDIO) ||
+                            ActivityCompat.shouldShowRequestPermissionRationale(this,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE )||  ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE ))    {
                         mLiveVideoBroadcaster.requestPermission();
                     } else {
                         new AlertDialog.Builder(BabyActivity.this)
-                                .setTitle("R.string.permission")
-                                .setMessage(getString(R.string.project_id))
+                                .setTitle(R.string.intent_to_settings)
+                                .setMessage(R.string.intent_to_settings_content)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
 
@@ -450,7 +488,7 @@ public class BabyActivity extends AppCompatActivity {
             mIsMuted = !mIsMuted;
             mLiveVideoBroadcaster.setAudioEnable(!mIsMuted);
             iv.setImageDrawable(getResources()
-                    .getDrawable(mIsMuted ? R.drawable.icon_mic_off_foreground : R.drawable.icon_mic_off_foreground));
+                    .getDrawable(mIsMuted ? R.drawable.no_microphone : R.drawable.microphone));
         }
     }
 

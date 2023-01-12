@@ -32,14 +32,11 @@
     <string name="register_account">Zaten bir hesabınız var mı?  </string>
     <string name="sign_in"><u>Giriş Yap</u></string>
     <string name="check"><u> Kullanım Sözleşmesi</u>\'ni okudum onaylıyorum.</string>
-    <string name="verify_error">Lütfen hesabınızı doğruladıktan sonra giriş yapın.</string>
-    <string name="email_password_error">Email ya da şifreniz hatalı.</string>
-
-
-
-
-
-
+    <string name="verify_error">Lütfen hesabınızı doğruladıktan sonra giriş yapın!</string>
+    <string name="email_password_error">Email ya da şifreniz hatalı!</string>
+    <string name="checkbox_error">Kullanıcı sözleşmesini kabul etmelisiniz!</string>
+    <string name="intent_to_settings">Ayarlara yönlendiriliyorsunuz...</string>
+    <string name="intent_to_settings_content">Sadece ayarlar içerisinden izin verebilirsiniz.</string>
 
 
 

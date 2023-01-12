@@ -3,9 +3,11 @@ package com.example.bambinobabymonitor.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.databinding.ActivityLoginBinding;
@@ -39,32 +41,58 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        activityLoginBinding.editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
+        activityLoginBinding.editTextPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    hideKeyboard(view);
+                }
+            }
+        });
         activityLoginBinding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email=activityLoginBinding.editTextEmail.getText().toString();
                 String password=activityLoginBinding.editTextPassword.getText().toString();
-                activityLoginBinding.textViewErrorLogin.setVisibility(View.INVISIBLE);
-                firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            if(firebaseUser.isEmailVerified()){
-                                startActivity(new Intent(LoginActivity.this,OnlineActivity.class));
-                                finish();
-                            }
-                            else{
-                                activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                                activityLoginBinding.textViewErrorLogin.setText(R.string.verify_error);
-                            }
 
-                        }else{
-                            activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
-                            activityLoginBinding.textViewErrorLogin.setText(R.string.email_password_error);
+                if (!email.equals("") && !password.equals("") ) {
+                    activityLoginBinding.textViewErrorLogin.setVisibility(View.INVISIBLE);
+                    firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                    startActivity(new Intent(LoginActivity.this, OnlineActivity.class));
+                                    finish();
+                                } else {
+                                    activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                                    activityLoginBinding.textViewErrorLogin.setText(R.string.verify_error);
+                                }
+
+                            } else {
+                                activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                                activityLoginBinding.textViewErrorLogin.setText(R.string.email_password_error);
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
+                    activityLoginBinding.textViewErrorLogin.setText(R.string.email_password_error);
+                }
             }
         });
+    }
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

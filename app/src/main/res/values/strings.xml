@@ -29,11 +29,12 @@
     <string name="valid_password">Please enter a valid password!</string>
     <string name="ok">OK</string>
     <string name="verify">Verification mail has been sent. Please verify before login!</string>
-    <string name="check"> I have read and approve <u>the Terms of Use Agreement.</u></string>
-    <string name="verify_error">Please login after verify your account.</string>
-    <string name="email_password_error">Email or password is not correct.</string>
-
-
+    <string name="check"> I have read and approve <u>the Terms of User Agreement.</u></string>
+    <string name="verify_error">Please login after verify your account!</string>
+    <string name="email_password_error">Email or password is not correct!</string>
+    <string name="checkbox_error">You must accept the Terms of User Agreement!</string>
+    <string name="intent_to_settings">Forwarding to the settings...</string>
+    <string name="intent_to_settings_content">You can only change the permissions from the settings.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

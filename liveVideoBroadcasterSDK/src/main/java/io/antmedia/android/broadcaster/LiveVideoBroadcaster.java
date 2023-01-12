@@ -626,7 +626,13 @@ public class LiveVideoBroadcaster extends Service implements ILiveVideoBroadcast
         boolean microPhonePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED;
 
-        return cameraPermissionGranted && microPhonePermissionGranted;
+        boolean readExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+
+        boolean writeExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+
+        return cameraPermissionGranted && microPhonePermissionGranted && readExternalStoragePermissionGranted && writeExternalStoragePermissionGranted;
     }
 
     public void requestPermission() {
@@ -637,6 +643,10 @@ public class LiveVideoBroadcaster extends Service implements ILiveVideoBroadcast
 
         boolean microPhonePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED;
+        boolean readExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+        boolean writeExternalStoragePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
 
 
         final List<String> permissionList = new ArrayList();
@@ -646,13 +656,19 @@ public class LiveVideoBroadcaster extends Service implements ILiveVideoBroadcast
         if (!microPhonePermissionGranted) {
             permissionList.add(Manifest.permission.RECORD_AUDIO);
         }
+        if(!readExternalStoragePermissionGranted){
+            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if(!writeExternalStoragePermissionGranted){
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
         if (permissionList.size() > 0 )
         {
             if (ActivityCompat.shouldShowRequestPermissionRationale(context,
                     Manifest.permission.CAMERA)) {
                 mAlertDialog = new AlertDialog.Builder(context)
-                        .setTitle(R.string.koray)
-                        .setMessage(getString(R.string.camera_permission_is_required))
+                        .setTitle(R.string.camera_permission_title)
+                        .setMessage(R.string.camera_permission_content)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 String[] permissionArray = permissionList.toArray(new String[permissionList.size()]);
@@ -666,8 +682,40 @@ public class LiveVideoBroadcaster extends Service implements ILiveVideoBroadcast
             else if (ActivityCompat.shouldShowRequestPermissionRationale(context,
                     Manifest.permission.RECORD_AUDIO)) {
                 mAlertDialog = new AlertDialog.Builder(context)
-                        .setMessage(getString(R.string.microphone_permission_is_required))
+                        .setTitle(R.string.microphone_permission_title)
+                        .setMessage(R.string.microphone_permission_content)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String[] permissionArray = permissionList.toArray(new String[permissionList.size()]);
+                                ActivityCompat.requestPermissions(context,
+                                        permissionArray,
+                                        PERMISSIONS_REQUEST);
+                            }
+                        })
+                        .show();
+
+            }
+            else if (ActivityCompat.shouldShowRequestPermissionRationale(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                mAlertDialog = new AlertDialog.Builder(context)
+                        .setTitle(R.string.storage_permission_title)
+                        .setMessage(R.string.storage_permission_content)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String[] permissionArray = permissionList.toArray(new String[permissionList.size()]);
+                                ActivityCompat.requestPermissions(context,
+                                        permissionArray,
+                                        PERMISSIONS_REQUEST);
+                            }
+                        })
+                        .show();
+
+            }
+            else if (ActivityCompat.shouldShowRequestPermissionRationale(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                mAlertDialog = new AlertDialog.Builder(context)
+                        .setMessage("Write external")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 String[] permissionArray = permissionList.toArray(new String[permissionList.size()]);
                                 ActivityCompat.requestPermissions(context,

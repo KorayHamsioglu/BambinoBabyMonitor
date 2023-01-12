@@ -76,6 +76,11 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         return songsList.size();
     }
 
+    public String getSongname(){
+
+        return "xxx";
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textViewMusicName;

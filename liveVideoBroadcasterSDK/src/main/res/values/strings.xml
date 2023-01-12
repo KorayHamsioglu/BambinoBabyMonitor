@@ -18,5 +18,12 @@
     <string name="only_one_camera_exists">Only one camera exists in this device</string>
     <string name="camera_permission_is_required">Camera permission is required to run this app</string>
     <string name="microphone_permission_is_required">Microphone permission is required to run this app</string>
+    <string name="camera_permission_title">Camera permission is required!</string>
+    <string name="microphone_permission_title">Microphone permission is required!</string>
+    <string name="camera_permission_content">The application is used the camera. Please permit!</string>
+    <string name="microphone_permission_content">The application is used the microphone. Please permit!</string>
+    <string name="storage_permission_title">Storage permission is required!</string>
+    <string name="storage_permission_content">The application is used the storage. Please permit!</string>
+
 
 </resources>

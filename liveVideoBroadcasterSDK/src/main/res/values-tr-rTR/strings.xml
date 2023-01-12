@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LiveVideoPublishSDK</string>
+    <string name="live_indicator">On Air</string>
+    <string name="nocamera">Bu cihaz içerisinde hiç kamera yoktur.</string>
+    <string name="camera_not_running_properly">Kamera yürütülemiyor.</string>
+    <string name="restart">Yeniden başlatın!</string>
+    <string name="streaming_not_finished">İnternetinizin yavaş olması sebebi ile yayın bitirilemedi!</string>
+    <string name="oopps_shouldnt_happen">Bir sorun var. bambinobabymonitor@gmail.com ile iletişime geçin.</string>
+    <string name="broadcast_connection_lost">Yayın bağlantısı koptu.</string>
+    <string name="low_bandwidth">Bağlantı yavaşladı. Gecikmeler artıyor.</string>
+    <string name="not_eligible_for_broadcast">Donanım yetersizliğinizden yayın başlatılamıyor.</string>
+    <string name="no_network_connectivity">Herhangi bir internete bağlı değilsiniz. Lütfen bir bağlantı gerçekleştirin.</string>
+    <string name="stop_broadcasting">Durdur</string>
+    <string name="permission_is_required">Kamera ve mikrofon izni uygulamanın yürütülmesi için gereklidir.</string>
+    <string name="koray">İzin ver</string>
+    <string name="app_doesnot_work_without_permissions">Uygulama izin alınmadan yürütülemez.</string>
+    <string name="first_call_open_camera">openCamera için ilk çağrı.</string>
+    <string name="only_one_camera_exists">Telefonunuzda sadece bir kamera bulunmaktadır.</string>
+    <string name="camera_permission_is_required">Kamera izni gereklidir.</string>
+    <string name="microphone_permission_is_required">Mikrofon izni gereklidir.</string>
+    <string name="camera_permission_title">Kamera izni gereklidir!</string>
+    <string name="microphone_permission_title">Mikrofon izni gereklidir!</string>
+    <string name="camera_permission_content">Uygulama kamerayı kullanmaktadır. Lütfen izin verin!</string>
+    <string name="microphone_permission_content">Uygulama mikrofonu kullanmaktadır. Lütfen izin verin!</string>
+    <string name="storage_permission_title">Dosyalara erişim izni gereklidir!</string>
+    <string name="storage_permission_content">Uygulama dosyaları kullanmaktadır. Lütfen izin verin!</string>
+</resources>

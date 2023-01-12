@@ -14,9 +14,6 @@ import java.io.IOException;
 
 import io.antmedia.android.broadcaster.encoder.AudioHandler;
 
-/**
- * Created by mekya on 28/03/2017.
- */
 
 class AudioRecorderThread extends Thread {
 
@@ -85,9 +82,11 @@ class AudioRecorderThread extends Thread {
         int outerCount = 0;
         int i = 0;
         byte[] data;
-
-
+        int timeCount = 0;
+        long tEnd;
+        long tStart=System.currentTimeMillis();
         while ((bufferReadResult = audioRecord.read(audioData[i], 0, audioData[i].length)) > 0) {
+
             if (environmentVoiceCount < 100) {
                 environmentVoice += mediaRecorder.getMaxAmplitude();
                 environmentVoiceCount++;
@@ -101,7 +100,7 @@ class AudioRecorderThread extends Thread {
                     babyVoiceCount++;
                 } else if (babyVoiceCount == 200) {
                     babyVoice /= 200;
-                    if (environmentVoice + 1000 < babyVoice) {
+                    if (1000 < babyVoice) {
                         System.out.println("Kontrol1");
                         databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
                         isCrying = true;
@@ -151,6 +150,14 @@ class AudioRecorderThread extends Thread {
             }
 
             Log.d(TAG, "AudioThread Finished, release audioRecord");
+            if(timeCount == 10){
+                tEnd=System.currentTimeMillis();
+                long tDelta=tEnd-tStart;
+                tStart = tEnd;
+                timeCount = 0;
+                System.out.println("1 Ses Ölçme Örneği Süresi: "+tDelta/10);
+            }
+            timeCount++;
         }
     }
 

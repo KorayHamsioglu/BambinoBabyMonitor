@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".baby.BabyActivity"
+    android:background="@drawable/choose_baby"
     android:id="@+id/root_layout">
 
     <android.opengl.GLSurfaceView
         android:id="@+id/cameraPreview_surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:visibility="gone"
         android:layout_gravity="center" />
     <View
@@ -32,9 +32,8 @@
         android:orientation="horizontal"
         android:visibility="visible"
         android:layout_alignParentStart="true">
-        <ImageButton
+        <ImageView
             android:id="@+id/settings_button"
-            style="?borderlessButtonStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
@@ -42,25 +41,35 @@
             android:src="@drawable/settings"
             />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/changeCameraButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:onClick="changeCamera"
             android:layout_marginHorizontal="25dp"
-            android:src="@drawable/video"
+            android:src="@drawable/switch_camera"
             />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/mic_mute_button"
-            style="?attr/borderlessButtonStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:onClick="toggleMute"
             android:src="@drawable/microphone"
             />
+
+        <ImageView
+            android:id="@+id/camera_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:onClick="toggleMute"
+            android:src="@drawable/video"
+            android:layout_marginLeft="25dp"
+            />
+
 
 
         <TextView
@@ -85,11 +94,11 @@
         android:visibility="visible"
         >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/toggle_broadcasting"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/video"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/live"
             android:onClick="toggleBroadcasting"
 
             />

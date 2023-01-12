@@ -30,12 +30,16 @@ public class WelcomeActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     TextView skipTextView;
     Button getStartedButton;
+    long mainActivityEnd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityWelcomeBinding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         View view = activityWelcomeBinding.getRoot();
         setContentView(view);
+       mainActivityEnd=getIntent().getExtras().getLong("timeMain");
+        System.out.println("Main Activity' den Welcome Activity' e geçiş süresi: "+(System.currentTimeMillis()-mainActivityEnd));
+
         tabLayout = findViewById(R.id.tabs);
         viewPager2 = findViewById(R.id.viewPager);
         skipTextView = findViewById(R.id.skipTextView);
@@ -45,7 +49,7 @@ public class WelcomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null){ // Already have a user!
-            Intent intent = new Intent(WelcomeActivity.this, OnlineActivity.class);
+            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }

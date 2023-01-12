@@ -85,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                 activityRegisterBinding.textViewError1.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError2.setVisibility(View.INVISIBLE);
                 activityRegisterBinding.textViewError3.setVisibility(View.INVISIBLE);
+                activityRegisterBinding.textViewError4.setVisibility(View.INVISIBLE);
 
    if(isValidEmail(email)&& isValidPassword(password) && password.equals(rePassword)) {
        if(activityRegisterBinding.registerCheckBox.isChecked()){
@@ -126,7 +127,8 @@ public class RegisterActivity extends AppCompatActivity {
                }
            });
        }else{
-
+                activityRegisterBinding.textViewError4.setVisibility(View.VISIBLE);
+                activityRegisterBinding.textViewError4.setText(R.string.checkbox_error);
        }
 
    }

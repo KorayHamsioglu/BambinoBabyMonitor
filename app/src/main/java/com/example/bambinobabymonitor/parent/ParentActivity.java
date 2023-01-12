@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -64,8 +65,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -78,6 +81,7 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ParentActivity extends AppCompatActivity implements View.OnClickListener, ExoPlayer.EventListener,
         PlaybackControlView.VisibilityListener {
@@ -97,7 +101,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout debugRootView;
     private TextView debugTextView;
     private Button retryButton;
-    private ImageView musicListView;
+    private ImageView musicListView,lowBatteryImageView,mediumBatteryImageView,highBatteryImageView;
 
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
@@ -137,6 +141,8 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
+        batteryStatus();
+
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseFirestore=FirebaseFirestore.getInstance();
 
@@ -171,6 +177,10 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         retryButton = (Button) findViewById(R.id.retry_button);
         musicListView=findViewById(R.id.libraryMusicButton);
         retryButton.setOnClickListener(this);
+        lowBatteryImageView = findViewById(R.id.lowBatteryStatus);
+        mediumBatteryImageView = findViewById(R.id.mediumBatteryStatus);
+        highBatteryImageView = findViewById(R.id.highBatteryStatus);
+
 
         //Müzik listesinin açılması
         musicListView.setOnClickListener(new View.OnClickListener() {
@@ -550,6 +560,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                     dialog.show();
 
 
+
                     imageButtonClose.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -564,4 +575,44 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+
+    public void batteryStatus(){
+        firebaseAuth=FirebaseAuth.getInstance();
+        String userID = firebaseAuth.getCurrentUser().getUid();
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference().child("Users").child(userID);
+
+
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String,Object> hashMap= (HashMap<String, Object>) snapshot.getValue();
+                long batteryLevel= (long) hashMap.get("battery_level");
+                System.out.println("BATTERY  "+batteryLevel);
+                if (batteryLevel<=25){
+                    lowBatteryImageView.setVisibility(View.VISIBLE);
+                    mediumBatteryImageView.setVisibility(View.INVISIBLE);
+                    highBatteryImageView.setVisibility(View.INVISIBLE);
+                }else if(batteryLevel<75){
+                    lowBatteryImageView.setVisibility(View.INVISIBLE);
+                    mediumBatteryImageView.setVisibility(View.VISIBLE);
+                    highBatteryImageView.setVisibility(View.INVISIBLE);
+
+                }else{
+                    lowBatteryImageView.setVisibility(View.INVISIBLE);
+                    mediumBatteryImageView.setVisibility(View.INVISIBLE);
+                    highBatteryImageView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
 }
