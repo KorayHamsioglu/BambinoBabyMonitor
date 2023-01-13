@@ -1,5 +1,6 @@
 package com.example.bambinobabymonitor.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,35 +38,18 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String songName=songsList.get(position);
         holder.textViewMusicName.setText(songName);
 
-        holder.imageButtonPlay.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
                 String userID=firebaseAuth.getCurrentUser().getUid();
                 FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
                 DatabaseReference databaseReference=firebaseDatabase.getReference().child("Users").child(userID).child("command_music_play");
-                databaseReference.setValue(songName);
-                holder.imageButtonPlay.setVisibility(View.INVISIBLE);
-                holder.imageButtonStop.setVisibility(View.VISIBLE);
-
-            }
-        });
-
-        holder.imageButtonStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-                String userID=firebaseAuth.getCurrentUser().getUid();
-                FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-                DatabaseReference databaseReference=firebaseDatabase.getReference().child("Users").child(userID).child("command_music_play");
-                databaseReference.setValue("none");
-                holder.imageButtonPlay.setVisibility(View.VISIBLE);
-                holder.imageButtonStop.setVisibility(View.INVISIBLE);
-
+                databaseReference.setValue(position);
             }
         });
 
@@ -76,10 +60,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         return songsList.size();
     }
 
-    public String getSongname(){
 
-        return "xxx";
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 

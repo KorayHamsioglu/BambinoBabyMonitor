@@ -549,15 +549,151 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     final Dialog dialog=new Dialog(ParentActivity.this);
                     dialog.setContentView(R.layout.musiclist_popup);
+                    final  int commandMusicPlay;
                     final RecyclerView recyclerViewMusic=dialog.findViewById(R.id.musicRecyclerView);
                     final ImageButton imageButtonClose=dialog.findViewById(R.id.imageButtonClose);
+                    final ImageButton imageButtonNext=dialog.findViewById(R.id.imageButtonNext);
+                    final ImageButton imageButtonPrevious=dialog.findViewById(R.id.imageButtonPrevious);
+                    final ImageButton imageButtonPlay=dialog.findViewById(R.id.imageButtonPlay);
+                    final ImageButton imageButtonPause=dialog.findViewById(R.id.imageButtonPause);
+                    final ImageButton imageButtonRepeat=dialog.findViewById(R.id.imageButtonRepeat);
+
+                    final TextView textViewSongName=dialog.findViewById(R.id.textViewSongName);
                     MusicListAdapter musicListAdapter=new MusicListAdapter(songsList,getApplicationContext());
                     recyclerViewMusic.setAdapter(musicListAdapter);
-
+                    textViewSongName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                    textViewSongName.setSingleLine(true);
+                    textViewSongName.setSelected(true);
                     RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getApplicationContext());
                     recyclerViewMusic.setLayoutManager(layoutManager);
-
+                    databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            Boolean isPaused= (Boolean) task.getResult().child("is_paused").getValue();
+                            Boolean isRepeat= (Boolean) task.getResult().child("is_repeat").getValue();
+                            if (isPaused){
+                                imageButtonPlay.setVisibility(View.VISIBLE);
+                                imageButtonPause.setVisibility(View.GONE);
+                            }else{
+                                imageButtonPlay.setVisibility(View.GONE);
+                                imageButtonPause.setVisibility(View.VISIBLE);
+                            }
+                            if (isRepeat){
+                                imageButtonRepeat.setBackground(getDrawable(R.drawable.repeat));
+                            }else{
+                                imageButtonRepeat.setBackground(getDrawable(R.drawable.no_repeat));
+                            }
+                        }
+                    });
                     dialog.show();
+
+                    databaseReference.child("command_music_play").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                            final int commandMusicPlay= (int) ((long)snapshot.getValue());
+                            databaseReference = FirebaseDatabase.getInstance().getReference();
+                            databaseReference = databaseReference.child("Users").child(userID);
+                            databaseReference.child("Musics").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    int count=0;
+                                    for (DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                                        if (commandMusicPlay==count){
+                                            textViewSongName.setText(dataSnapshot.getKey());
+
+                                            imageButtonPlay.setVisibility(View.GONE);
+                                            imageButtonPause.setVisibility(View.VISIBLE);
+                                        }
+
+                                        count++;
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    imageButtonPlay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.child("is_paused").setValue(false);
+                            imageButtonPlay.setVisibility(View.GONE);
+                            imageButtonPause.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    imageButtonPause.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.child("is_paused").setValue(true);
+                            imageButtonPause.setVisibility(View.GONE);
+                            imageButtonPlay.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    imageButtonNext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        int commandMusicPlay= (int) ((long)task.getResult().child("command_music_play").getValue());
+                                        commandMusicPlay=(commandMusicPlay+1)%songsList.size();
+                                        databaseReference.child("command_music_play").setValue(commandMusicPlay);
+                                        databaseReference.child("is_paused").setValue(false);
+
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    imageButtonPrevious.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        int commandMusicPlay= (int) ((long)task.getResult().child("command_music_play").getValue());
+                                        commandMusicPlay=(((commandMusicPlay-1)%songsList.size()) +songsList.size())% songsList.size();
+                                        System.out.println("Command:  "+commandMusicPlay +"  songlist: "+songsList.size()+"  Adapter:  "+musicListAdapter.getItemCount());
+                                        databaseReference.child("command_music_play").setValue(commandMusicPlay);
+                                        databaseReference.child("is_paused").setValue(false);
+
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    imageButtonRepeat.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        Boolean isRepeat= (Boolean) task.getResult().child("is_repeat").getValue();
+                                        if (isRepeat){
+                                            databaseReference.child("is_repeat").setValue(!isRepeat);
+                                            imageButtonRepeat.setBackground(getDrawable(R.drawable.no_repeat));
+                                        }else{
+                                            databaseReference.child("is_repeat").setValue(!isRepeat);
+                                            imageButtonRepeat.setBackground(getDrawable(R.drawable.repeat));
+                                        }
+
+
+                                    }
+                                }
+                            });
+                        }
+                    });
 
 
 
@@ -572,9 +708,8 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-
-
     }
+
 
     public void batteryStatus(){
         firebaseAuth=FirebaseAuth.getInstance();

@@ -100,38 +100,25 @@ class AudioRecorderThread extends Thread {
                     babyVoiceCount++;
                 } else if (babyVoiceCount == 200) {
                     babyVoice /= 200;
-                    if (1000 < babyVoice) {
-                        System.out.println("Kontrol1");
+                    if (( (2666 < babyVoice) && (environmentVoice < 1000))  || (environmentVoice + 1333 < babyVoice)) {
+                        System.out.println("Voice of Baby: " + babyVoice);
+                        System.out.println("Voice of Environment: " + environmentVoice);
                         databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
-                        isCrying = true;
                     } else {
                         System.out.println("Kontrol2");
                         databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(false);
-                        isCrying = false;
-                    }
-                    babyVoice = 0;
-                    babyVoiceCount++;
-                } else if (babyVoiceCount < 400) {
-                    babyVoice += mediaRecorder.getMaxAmplitude();
-                    babyVoiceCount++;
-                } else if (babyVoiceCount == 400) {
-                    babyVoice /= 200;
-                    if (!isCrying) {
-                        if (environmentVoice + 1000 < babyVoice) {
-                            System.out.println("Kontrol3");
-                            databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(true);
-                        }
                     }
                     babyVoice = 0;
                     babyVoiceCount = 0;
                 }
                 outerCount++;
-                if (outerCount == 1700) {
+                if (outerCount == 1100) {
                     outerCount = 0;
                     babyVoice = 0;
                     babyVoiceCount = 0;
-                    environmentVoice = 0;
-                    environmentVoiceCount = 0;
+                    environmentVoice=0;
+                    environmentVoiceCount=0;
+                    databaseReference.child(firebaseAuth.getCurrentUser().getUid()).child("command_voice").setValue(false);
                 }
 
 

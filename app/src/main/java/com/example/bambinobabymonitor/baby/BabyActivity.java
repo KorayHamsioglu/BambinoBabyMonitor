@@ -103,6 +103,7 @@ public class BabyActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     boolean isCameraMuted=false;
     private MediaPlayer mediaPlayer;
+    private  String path;
 
 
     private BroadcastReceiver batteryLevelReceiver = new BroadcastReceiver() {
@@ -201,7 +202,6 @@ public class BabyActivity extends AppCompatActivity {
         //Müzik için
 
         addMusics();
-
         mediaPlayer=new MediaPlayer();
 
 
@@ -213,46 +213,60 @@ public class BabyActivity extends AppCompatActivity {
 
         databaseReference=firebaseDatabase.getReference("Users").child(userID);
 
-        databaseReference.child("command_music_play").setValue("none");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("command_music_play").setValue(-2);
+        databaseReference.child("is_paused").setValue(false);
+        databaseReference.child("command_music_play").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashMap<String, Object> hashMap= (HashMap<String, Object>) snapshot.getValue();
-                String commandMusicPlay= (String) hashMap.get("command_music_play");
-                Boolean commandVoice= (Boolean) hashMap.get("command_voice");
-                String commandRecord= (String) hashMap.get("command_record");
+               // HashMap<String, Object> hashMap= (HashMap<String, Object>) snapshot.getValue();
+                int commandMusicPlay= (int) ((long) snapshot.getValue());
 
-                databaseReference.child("Musics").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful()){
-                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()){
-                                    if (commandMusicPlay.equals(dataSnapshot.getKey())){
+                if(commandMusicPlay != -2){
 
-                                        if(mediaPlayer.isPlaying()){
-                                            mediaPlayer.stop();
-                                        }
-                                        mediaPlayer.reset();
-                                        try {
-                                            mediaPlayer.setDataSource((String) dataSnapshot.getValue());
-                                            mediaPlayer.prepare();
-                                            mediaPlayer.start();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    databaseReference = databaseReference.child("Users").child(userID).child("Musics");
+                    databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            int count = 0;
+                            for(DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                                if (commandMusicPlay == count){
+                                        if (mediaPlayer.isPlaying()) {
+                                                mediaPlayer.stop();
+
+                                            }
+                                                mediaPlayer.reset();
+                                            try {
+                                                path= (String) dataSnapshot.getValue();
+                                                mediaPlayer.setDataSource(path);
+                                                mediaPlayer.prepare();
+                                                mediaPlayer.start();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+
                                 }
-                                if (commandMusicPlay.equals("none")){
-                                    if (mediaPlayer.isPlaying()){
-                                        mediaPlayer.stop();
-                                    }
-                                }
-
+                                count++;
                             }
-                    }
-                });
+                        }
+                    });
 
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference.child("command_voice").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Boolean commandVoice= (Boolean) snapshot.getValue();
                 if (commandVoice){
                     documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -272,6 +286,7 @@ public class BabyActivity extends AppCompatActivity {
                         }
                     });
                 }
+
             }
 
             @Override
@@ -280,8 +295,91 @@ public class BabyActivity extends AppCompatActivity {
             }
         });
 
+        databaseReference.child("is_paused").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Boolean isPaused= (Boolean) snapshot.getValue();
+                if (mediaPlayer.isPlaying()){
+                    if (isPaused){
+                        mediaPlayer.pause();
+                    }
+                }else {
+                    mediaPlayer.start();
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    databaseReference=firebaseDatabase.getReference("Users").child(userID);
+                    databaseReference.child("is_paused").setValue(false);
+
+                    databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            Boolean isRepeat= (Boolean) task.getResult().child("is_repeat").getValue();
+                            int count= (int) task.getResult().child("Musics").getChildrenCount();
+                            if (isRepeat){
+                                databaseReference.child("command_music_play").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        int commandMusicPlay= (int) ((long) snapshot.getValue());
+                                        databaseReference = FirebaseDatabase.getInstance().getReference();
+                                        databaseReference = databaseReference.child("Users").child(userID).child("Musics");
+                                        databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                int count = 0;
+                                                for(DataSnapshot dataSnapshot: task.getResult().getChildren()){
+                                                    if (commandMusicPlay == count){
+                                                        if (mediaPlayer.isPlaying()) {
+                                                            mediaPlayer.stop();
+
+                                                        }
+                                                        mediaPlayer.reset();
+                                                        try {
+                                                            path= (String) dataSnapshot.getValue();
+                                                            mediaPlayer.setDataSource(path);
+                                                            mediaPlayer.prepare();
+                                                            mediaPlayer.start();
+                                                        } catch (IOException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                    }
+                                                    count++;
+                                                }
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }else {
+                                databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        int commandMusicPlay= (int) ((long)task.getResult().child("command_music_play").getValue());
+                                        commandMusicPlay=(commandMusicPlay+1)%count;
+                                        databaseReference.child("command_music_play").setValue(commandMusicPlay);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                }
+            });
 
         //Toast.makeText(this, (firebaseAuth.getCurrentUser().getEmail), Toast.LENGTH_SHORT).show();
         startService(mLiveVideoBroadcasterServiceIntent);
