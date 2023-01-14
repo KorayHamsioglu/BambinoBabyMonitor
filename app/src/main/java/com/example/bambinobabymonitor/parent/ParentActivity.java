@@ -799,6 +799,4 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         });
 
     }
-
-
 }

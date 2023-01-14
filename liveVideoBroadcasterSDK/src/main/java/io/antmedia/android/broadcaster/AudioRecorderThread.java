@@ -136,13 +136,13 @@ class AudioRecorderThread extends Thread {
                 }
             }
 
-            Log.d(TAG, "AudioThread Finished, release audioRecord");
+            //Log.d(TAG, "AudioThread Finished, release audioRecord");
             if(timeCount == 10){
                 tEnd=System.currentTimeMillis();
                 long tDelta=tEnd-tStart;
                 tStart = tEnd;
                 timeCount = 0;
-                System.out.println("1 Ses Ölçme Örneği Süresi: "+tDelta/10);
+
             }
             timeCount++;
         }

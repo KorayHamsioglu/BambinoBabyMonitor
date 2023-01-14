@@ -11,7 +11,7 @@ import com.example.bambinobabymonitor.R;
 public class MainActivity extends AppCompatActivity {
     // Splash Activity (First Activity)
     private static int SPLASH_SCREEN_TIMEOUT = 1000;
-    public static final String RTMP_BASE_URL = "rtmp://172.20.10.14:1935/live/";
+    public static final String RTMP_BASE_URL = "rtmp://192.168.1.103:1935/live/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
