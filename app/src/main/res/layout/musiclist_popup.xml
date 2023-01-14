@@ -10,6 +10,26 @@
         android:gravity="end"
         android:layout_height="wrap_content">
         <ImageButton
+            android:id="@+id/imageButtonDecrease"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_baseline_remove_circle_outline_24"
+            android:layout_marginRight="60dp"/>
+        <TextView
+            android:id="@+id/textViewVolume"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:text="0"
+            android:textColor="@color/black"
+            android:layout_marginRight="50dp"
+            android:gravity="center"/>
+        <ImageButton
+            android:id="@+id/imageButtonIncrease"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_baseline_add_circle_24"
+            android:layout_marginRight="80dp"/>
+        <ImageButton
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:id="@+id/imageButtonClose"

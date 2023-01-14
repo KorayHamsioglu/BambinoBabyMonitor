@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
@@ -174,6 +175,8 @@ public class BabyActivity extends AppCompatActivity {
 
         Random random = new Random();
 
+        AudioManager audioManager= (AudioManager) getSystemService(AUDIO_SERVICE);
+        int volume_level= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
 
         mCameraButton.setOnClickListener(new View.OnClickListener() {
@@ -212,7 +215,7 @@ public class BabyActivity extends AppCompatActivity {
         documentReference.update("babyPlayerID",OneSignal.getDeviceState().getUserId());
 
         databaseReference=firebaseDatabase.getReference("Users").child(userID);
-
+        databaseReference.child("volume_level").setValue(volume_level);
         databaseReference.child("command_music_play").setValue(-2);
         databaseReference.child("is_paused").setValue(false);
         databaseReference.child("command_music_play").addValueEventListener(new ValueEventListener() {
@@ -380,6 +383,20 @@ public class BabyActivity extends AppCompatActivity {
 
                 }
             });
+
+            databaseReference.child("volume_level").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    int volume= (int) ((long)snapshot.getValue());
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_SHOW_UI);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
 
         //Toast.makeText(this, (firebaseAuth.getCurrentUser().getEmail), Toast.LENGTH_SHORT).show();
         startService(mLiveVideoBroadcasterServiceIntent);

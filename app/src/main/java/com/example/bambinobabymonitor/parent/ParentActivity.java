@@ -557,6 +557,10 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                     final ImageButton imageButtonPlay=dialog.findViewById(R.id.imageButtonPlay);
                     final ImageButton imageButtonPause=dialog.findViewById(R.id.imageButtonPause);
                     final ImageButton imageButtonRepeat=dialog.findViewById(R.id.imageButtonRepeat);
+                    final ImageButton imageButtonIncrease=dialog.findViewById(R.id.imageButtonIncrease);
+                    final ImageButton imageButtonDecrease=dialog.findViewById(R.id.imageButtonDecrease);
+                    final TextView textViewVolume=dialog.findViewById(R.id.textViewVolume);
+
 
                     final TextView textViewSongName=dialog.findViewById(R.id.textViewSongName);
                     MusicListAdapter musicListAdapter=new MusicListAdapter(songsList,getApplicationContext());
@@ -566,6 +570,53 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
                     textViewSongName.setSelected(true);
                     RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getApplicationContext());
                     recyclerViewMusic.setLayoutManager(layoutManager);
+
+
+                    imageButtonIncrease.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    int volume= (int) ((long)task.getResult().child("volume_level").getValue());
+                                    if (volume<15){
+                                        volume++;
+                                        databaseReference.child("volume_level").setValue(volume);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    imageButtonDecrease.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                           databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                               @Override
+                               public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                   int volume= (int) ((long)task.getResult().child("volume_level").getValue());
+                                   if (volume>0){
+                                       volume--;
+                                       databaseReference.child("volume_level").setValue(volume);
+                                   }
+                               }
+                           });
+                        }
+                    });
+
+                    databaseReference.child("volume_level").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            int volume= (int) ((long)snapshot.getValue());
+                            textViewVolume.setText(String.valueOf(volume));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     databaseReference.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {

@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth=FirebaseAuth.getInstance();
         firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null && firebaseUser.isEmailVerified()){
-            Intent intent=new Intent(LoginActivity.this,OnlineActivity.class);
+            Intent intent=new Intent(LoginActivity.this,ChooseActivity.class);
             startActivity(intent);
             finish();
         }
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 if (firebaseAuth.getCurrentUser().isEmailVerified()) {
-                                    startActivity(new Intent(LoginActivity.this, OnlineActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, ChooseActivity.class));
                                     finish();
                                 } else {
                                     activityLoginBinding.textViewErrorLogin.setVisibility(View.VISIBLE);
