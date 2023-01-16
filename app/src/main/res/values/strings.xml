@@ -35,6 +35,16 @@
     <string name="checkbox_error">You must accept the Terms of User Agreement!</string>
     <string name="intent_to_settings">Forwarding to the settings...</string>
     <string name="intent_to_settings_content">You can only change the permissions from the settings.</string>
+    <string name="child">Baby</string>
+    <string name="parent">Parent</string>
+    <string name="normal">Normal</string>
+    <string name="performance">Power Saving</string>
+    <string name="normal_info">Normal mode provides high quality video and voice transmission!</string>
+    <string name="performance_info">Power saving mode minimizes resource consumption by transmitting audio only!</string>
+    <string name="choose">Choose a Mode</string>
+    <string name="logout"><u>Log Out</u></string>
+
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bambinobabymonitor.R;
+import com.example.bambinobabymonitor.activities.ChooseActivity;
+import com.example.bambinobabymonitor.activities.OnlineActivity;
 import com.example.bambinobabymonitor.adapters.MusicListAdapter;
 import com.google.android.exoplayer2.BuildConfig;
 import com.google.android.exoplayer2.C;
@@ -101,7 +103,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout debugRootView;
     private TextView debugTextView;
     private Button retryButton;
-    private ImageView musicListView,lowBatteryImageView,mediumBatteryImageView,highBatteryImageView;
+    private ImageView musicListView,lowBatteryImageView,mediumBatteryImageView,highBatteryImageView,imageViewBack;
 
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
@@ -180,6 +182,7 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
         lowBatteryImageView = findViewById(R.id.lowBatteryStatus);
         mediumBatteryImageView = findViewById(R.id.mediumBatteryStatus);
         highBatteryImageView = findViewById(R.id.highBatteryStatus);
+        imageViewBack=findViewById(R.id.back_button_parent);
 
 
         //Müzik listesinin açılması
@@ -187,6 +190,14 @@ public class ParentActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 musicListPopup();
+            }
+        });
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ParentActivity.this, OnlineActivity.class);
+                startActivity(intent);
             }
         });
 

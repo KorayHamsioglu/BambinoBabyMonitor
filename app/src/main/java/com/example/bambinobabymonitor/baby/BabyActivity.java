@@ -50,6 +50,8 @@ import android.widget.Toast;
 
 import com.example.bambinobabymonitor.AudioModel;
 import com.example.bambinobabymonitor.R;
+import com.example.bambinobabymonitor.activities.ChooseActivity;
+import com.example.bambinobabymonitor.activities.OnlineActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -89,7 +91,7 @@ public class BabyActivity extends AppCompatActivity {
     private Timer mTimer;
     private long mElapsedTime;
     public TimerHandler mTimerHandler;
-    private ImageView mSettingsButton,mBroadcastControlButton,mCameraButton;
+    private ImageView mSettingsButton,mBroadcastControlButton,mCameraButton,imageViewBack;
     private CameraResolutionsFragment mCameraResolutionsDialog;
     private Intent mLiveVideoBroadcasterServiceIntent;
     private TextView mStreamLiveStatus;
@@ -119,7 +121,6 @@ public class BabyActivity extends AppCompatActivity {
             System.out.println("Battery Level: "+level+"%");
         }
     };
-
 
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -170,6 +171,7 @@ public class BabyActivity extends AppCompatActivity {
         firebaseDatabase=FirebaseDatabase.getInstance();
         mCameraButton=findViewById(R.id.camera_button);
         coordinatorLayout=findViewById(R.id.root_layout);
+        imageViewBack=findViewById(R.id.back_button_baby);
 
         this.registerReceiver(this.batteryLevelReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
@@ -177,6 +179,15 @@ public class BabyActivity extends AppCompatActivity {
 
         AudioManager audioManager= (AudioManager) getSystemService(AUDIO_SERVICE);
         int volume_level= audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(BabyActivity.this, OnlineActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
         mCameraButton.setOnClickListener(new View.OnClickListener() {

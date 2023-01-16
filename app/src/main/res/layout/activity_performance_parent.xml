@@ -1,95 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/baby_lilac_bold"
+    android:orientation="vertical"
+    android:id="@+id/layoutParentPerformance"
+    android:background="@color/white"
     tools:context=".activities.PerformanceParentActivity">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="15dp"
+        android:gravity="end"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginRight="200dp">
+            <ImageView
+                android:id="@+id/back_button_parent_performance"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/back"
+                />
+
+
+        </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="20dp">
+
     <ImageView
         android:id="@+id/lowBatteryStatusPerformance"
-        android:layout_width="177dp"
-        android:layout_height="93dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:adjustViewBounds="true"
+        android:layout_marginRight="20dp"
         android:src="@drawable/low_battery_level"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/editTextIP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        />
 
     <ImageView
         android:id="@+id/mediumBatteryStatusPerformance"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="24dp"
         android:adjustViewBounds="true"
+
         android:src="@drawable/medium_battery_level"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="gone"
+       />
 
     <ImageView
         android:id="@+id/highBatteryStatusPerformance"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:adjustViewBounds="true"
         android:src="@drawable/full_battery_level"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/libraryMusicButtonPerformance"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="end"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="16dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/music_folder_3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="gone"
+       />
 
-    <EditText
-        android:id="@+id/editTextPort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextIP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/libraryMusicButtonPerformance"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:adjustViewBounds="true"
+            android:src="@drawable/music_folder_3"
+            />
+
+    </LinearLayout>
+
+
+    <ImageButton
         android:id="@+id/buttonStartAudio"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="188dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_gravity="center"
+        android:layout_marginTop="450dp"
+        android:background="@drawable/live"
+
+        />
+</LinearLayout>

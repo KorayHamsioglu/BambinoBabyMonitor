@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.bambinobabymonitor.R;
 import com.example.bambinobabymonitor.baby.BabyActivity;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 
 public class OnlineActivity extends AppCompatActivity {
     private ImageButton imageButtonParent,imageButtonBaby;
+    private ImageView imageViewBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class OnlineActivity extends AppCompatActivity {
 
         imageButtonBaby=findViewById(R.id.imageButtonBaby);
         imageButtonParent=findViewById(R.id.imageButtonParent);
+        imageViewBack=findViewById(R.id.back_button_online);
 
         imageButtonParent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +47,15 @@ public class OnlineActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(OnlineActivity.this, BabyActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(OnlineActivity.this,ChooseActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

@@ -19,15 +19,35 @@
         android:layout_height="wrap_content"
         android:background="#88000000"
         android:orientation="vertical">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_margin="15dp"
             android:gravity="end"
             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginRight="200dp">
+                <ImageView
+                    android:id="@+id/back_button_parent"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/back"
+                    />
+
+
+            </LinearLayout>
                 <RelativeLayout
                     android:layout_width="40dp"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center_vertical">
                     <ImageView
                         android:id="@+id/lowBatteryStatus"
                         android:layout_width="40dp"

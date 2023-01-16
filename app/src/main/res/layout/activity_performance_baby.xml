@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/performanceBabyLayout"
     android:background="@color/white"
     tools:context=".activities.PerformanceBabyActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_margin="15dp"
+        android:gravity="start"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:id="@+id/back_button_baby_performance"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/back"
+                />
 
 
-    <TextView
-        android:id="@+id/textViewIP"
-        android:layout_width="218dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="160dp"
-        android:text="TextView"
-        android:textSize="20dp"
-        android:textColor="@color/baby_lilac_bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewPort"
-        android:layout_width="218dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="104dp"
-        android:text="TextView"
-        android:textColor="@color/baby_lilac_bold"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textViewIP" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

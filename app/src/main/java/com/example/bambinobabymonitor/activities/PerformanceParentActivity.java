@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.bambinobabymonitor.R;
@@ -49,25 +50,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class PerformanceParentActivity extends AppCompatActivity {
 
-    String _address;
-    int _port;
-    String _name;
-    EditText editTextIP,editTextPort;
-    Button buttonStartAudio;
+    ImageButton buttonStartAudio;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     FirebaseFirestore firebaseFirestore;
     Thread _listenThread;
-    private ImageView musicListView,lowBatteryImageView,mediumBatteryImageView,highBatteryImageView;
+    private LinearLayout linearLayoutParentPerformance;
+    private ImageView musicListView,lowBatteryImageView,mediumBatteryImageView,highBatteryImageView,imageViewBack;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
-
-
-
-
 
     private void streamAudio(final Socket socket) throws IllegalArgumentException, IllegalStateException, IOException
     {
@@ -119,20 +114,14 @@ public class PerformanceParentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_performance_parent);
 
-        //  final TextView connectedText = (TextView) findViewById(R.id.connectedTo);
-        //  connectedText.setText(_name);
-
-        //  final TextView statusText = (TextView) findViewById(R.id.textStatus);
-        // statusText.setText(R.string.listening);
-
-        editTextIP=(EditText) findViewById(R.id.editTextIP);
-        editTextPort=findViewById(R.id.editTextPort);
         buttonStartAudio=findViewById(R.id.buttonStartAudio);
 
         lowBatteryImageView = findViewById(R.id.lowBatteryStatusPerformance);
         mediumBatteryImageView = findViewById(R.id.mediumBatteryStatusPerformance);
         highBatteryImageView = findViewById(R.id.highBatteryStatusPerformance);
         musicListView=findViewById(R.id.libraryMusicButtonPerformance);
+        imageViewBack=findViewById(R.id.back_button_parent_performance);
+        linearLayoutParentPerformance=findViewById(R.id.layoutParentPerformance);
 
         firebaseAuth=FirebaseAuth.getInstance();
         String userID=firebaseAuth.getCurrentUser().getUid();
@@ -140,12 +129,19 @@ public class PerformanceParentActivity extends AppCompatActivity {
         databaseReference=firebaseDatabase.getReference().child("Users").child(userID);
         firebaseFirestore=FirebaseFirestore.getInstance();
 
-       batteryStatus();
+        batteryStatus();
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
 
         System.out.println("DEVICE ID: "+OneSignal.getDeviceState().getUserId());
+
+        Random random = new Random();
+
+        int cartoonChoice = random.nextInt(7);
+
+        linearLayoutParentPerformance.setBackground(getResources().getDrawable(R.drawable.cartoon_0 +cartoonChoice));
+
 
         DocumentReference documentReference = firebaseFirestore.collection("users").document(userID);
         documentReference.update("parentPlayerID",OneSignal.getDeviceState().getUserId());
@@ -157,11 +153,18 @@ public class PerformanceParentActivity extends AppCompatActivity {
             }
         });
 
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(PerformanceParentActivity.this,PerformanceActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         buttonStartAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                         databaseReference.child("Connection").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -173,7 +176,6 @@ public class PerformanceParentActivity extends AppCompatActivity {
                                     @Override
                                     public void run()
                                     {
-
                                 try
                                 {
 
@@ -190,12 +192,7 @@ public class PerformanceParentActivity extends AppCompatActivity {
                                 }
                                 if(Thread.currentThread().isInterrupted() == false)
                                 {
-                                    // If this thread has not been interrupted, likely something
-                                    // bad happened with the connection to the child device. Play
-                                    // an alert to notify the user that the connection has been
-                                    // interrupted.
-                                    // playAlert();
-
+                                    
                                     PerformanceParentActivity.this.runOnUiThread(new Runnable()
                                     {
                                         @Override
@@ -498,8 +495,11 @@ public class PerformanceParentActivity extends AppCompatActivity {
     @Override
     public void onDestroy()
     {
-        _listenThread.interrupt();
-        _listenThread=null;
+        if (_listenThread!=null){
+            _listenThread.interrupt();
+            _listenThread=null;
+        }
+
         super.onDestroy();
     }
 }

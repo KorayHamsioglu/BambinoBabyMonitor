@@ -30,6 +30,9 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.bambinobabymonitor.AudioModel;
@@ -56,6 +59,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class PerformanceBabyActivity extends AppCompatActivity {
 
@@ -69,6 +73,8 @@ public class PerformanceBabyActivity extends AppCompatActivity {
     String parentPlayerID;
     private MediaPlayer mediaPlayer;
     private  String path;
+    private ImageView imageViewBack;
+    private LinearLayout linearLayoutBabyPerformance;
     private static final String ONESIGNAL_APP_ID = "c45ba6ea-96f5-4070-82fb-030cc886e141";
 
     private BroadcastReceiver batteryLevelReceiver = new BroadcastReceiver() {
@@ -224,11 +230,14 @@ public class PerformanceBabyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_performance_baby);
 
         _nsdManager = (NsdManager)this.getSystemService(Context.NSD_SERVICE);
+        imageViewBack=findViewById(R.id.back_button_baby_performance);
 
         firebaseAuth=FirebaseAuth.getInstance();
         String userID=firebaseAuth.getCurrentUser().getUid();
         firebaseDatabase=FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference().child("Users").child(userID);
+
+        linearLayoutBabyPerformance=findViewById(R.id.performanceBabyLayout);
 
         this.registerReceiver(this.batteryLevelReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
@@ -241,6 +250,12 @@ public class PerformanceBabyActivity extends AppCompatActivity {
         databaseReference.child("volume_level").setValue(volume_level);
         databaseReference.child("command_music_play").setValue(-2);
         databaseReference.child("is_paused").setValue(false);
+
+        Random random = new Random();
+
+        int cartoonChoice = random.nextInt(7);
+
+       linearLayoutBabyPerformance.setBackground(getResources().getDrawable(R.drawable.cartoon_0 +cartoonChoice));
 
         _serviceThread = new Thread(new Runnable()
         {
@@ -313,8 +328,6 @@ public class PerformanceBabyActivity extends AppCompatActivity {
         });
         _serviceThread.start();
 
-        final TextView addressText = (TextView) findViewById(R.id.textViewIP);
-
         // Use the application context to get WifiManager, to avoid leak before Android 5.1
         final WifiManager wifiManager =
                 (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
@@ -324,11 +337,11 @@ public class PerformanceBabyActivity extends AppCompatActivity {
         {
             @SuppressWarnings("deprecation")
             final String ipAddress = Formatter.formatIpAddress(address);
-            addressText.setText(ipAddress);
+
         }
         else
         {
-            addressText.setText("No wifi");
+
         }
 
 
@@ -379,6 +392,15 @@ public class PerformanceBabyActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(PerformanceBabyActivity.this,PerformanceActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -526,9 +548,6 @@ public class PerformanceBabyActivity extends AppCompatActivity {
 
                         //final TextView serviceText = (TextView) findViewById(R.id.textService);
                         //serviceText.setText(serviceName);
-
-                        final TextView portText = (TextView) findViewById(R.id.textViewPort);
-                        portText.setText(Integer.toString(port));
                     }
                 });
             }

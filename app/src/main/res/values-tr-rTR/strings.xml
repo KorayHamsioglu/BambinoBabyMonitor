@@ -37,6 +37,17 @@
     <string name="checkbox_error">Kullanıcı sözleşmesini kabul etmelisiniz!</string>
     <string name="intent_to_settings">Ayarlara yönlendiriliyorsunuz...</string>
     <string name="intent_to_settings_content">Sadece ayarlar içerisinden izin verebilirsiniz.</string>
+    <string name="child">Bebek</string>
+    <string name="parent">Ebeveyn</string>
+    <string name="normal">Normal</string>
+    <string name="performance">Güç Tasarrufu</string>
+    <string name="normal_info">Normal mod, kaliteli şekilde görüntü ve ses iletimini sağlar!</string>
+    <string name="performance_info">Güç tasarrufu modu, sadece ses iletimi ile kaynak tüketimini minimum hale getirir!</string>
+    <string name="choose">Bir Mod Seçin</string>
+    <string name="logout"><u>Çıkış Yap</u></string>
+
+
+
 
 
 
