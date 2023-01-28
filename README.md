@@ -10,7 +10,7 @@ Push notification sent to parent's phone when baby's volume exceeds environment 
 
 2. Remote Music Play
 
-Parents can remotely choose,play,stop or repeat musics/lulabies from the external storage of baby's phone. For this feature Firebase Realtime Database used for remote commands and retrieve musics from baby's phone.
+Parents can remotely choose,play,stop or repeat musics/lulabies from the external storage of baby's phone. For this feature Firebase Realtime Database used for remote commands and for retrieving musics from baby's phone.
 
 3. Power Saving Mode
 
