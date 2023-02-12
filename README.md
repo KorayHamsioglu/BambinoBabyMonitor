@@ -19,9 +19,17 @@ Security is a key consideration in the design of Bambino Baby Monitor, and the a
 
 # Installation
 
+```js
 import copy from 'copy-to-clipboard';
+
 copy('Text');
 
+// Copy with options
+copy('Text', {
+  debug: true,
+  message: 'Press #{key} to copy',
+});
+```
 
 
 
