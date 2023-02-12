@@ -8,7 +8,7 @@ Security is a key consideration in the design of Bambino Baby Monitor, and the a
 
 # Features
 
-• Real-time video and audio broadcasting via TCP-based RTMP__
+• Real-time video and audio broadcasting via TCP-based RTMP <br />
 • User authentication and verification using Firebase Authentication
 • User credentials securely stored in Firestore Database
 • Alerts parent via push notification when baby's voice exceeds ambient noise level
