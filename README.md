@@ -9,27 +9,16 @@ Security is a key consideration in the design of Bambino Baby Monitor, and the a
 # Features
 
 • Real-time video and audio broadcasting via TCP-based RTMP <br />
-• User authentication and verification using Firebase Authentication
-• User credentials securely stored in Firestore Database
-• Alerts parent via push notification when baby's voice exceeds ambient noise level
-• Remote music play with ability to choose, play, stop and repeat music from baby's device
-• Ability to adjust volume of music remotely from parent's device
-• Power-saving mode (audio only)
-• Ability to monitor battery level of baby's device from parent's device
+• User authentication and verification using Firebase Authentication <br />
+• User credentials securely stored in Firestore Database <br />
+• Alerts parent via push notification when baby's voice exceeds ambient noise level <br />
+• Remote music play with ability to choose, play, stop and repeat music from baby's device <br />
+• Ability to adjust volume of music remotely from parent's device <br />
+• Power-saving mode (audio only) <br />
+• Ability to monitor battery level of baby's device from parent's device <br />
 
-# Installation
+# Screenshots
 
-```js
-import copy from 'copy-to-clipboard';
-
-copy('Text');
-
-// Copy with options
-copy('Text', {
-  debug: true,
-  message: 'Press #{key} to copy',
-});
-```
 
 
 
