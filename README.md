@@ -22,7 +22,7 @@ Security is a key consideration in the design of Bambino Baby Monitor, and the a
 # Screenshots
 
 <p float="left">
-<img width="195" alt="Ekran Resmi 2023-02-12 20 20 47" src="https://user-images.githubusercontent.com/87299676/218326468-25092ba1-922a-4bf6-abdb-ec0e7d292994.png">
+<img width="230" alt="Ekran Resmi 2023-02-12 20 20 47" src="https://user-images.githubusercontent.com/87299676/218326468-25092ba1-922a-4bf6-abdb-ec0e7d292994.png">
 
 <img width="234" alt="Ekran Resmi 2023-02-12 19 50 42" src="https://user-images.githubusercontent.com/87299676/218324867-70d51dcb-70f6-4271-973b-3ef1b0e197d7.png">
 
