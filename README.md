@@ -1,4 +1,4 @@
-# BambinoBabyMonitor
+# Description
 
 Bambino Baby Monitor is an advanced and secure baby monitoring solution designed specifically for Android devices. With its real-time video and audio streaming capabilities, Bambino Baby Monitor provides parents with a comprehensive and reliable way to keep an eye on their little ones. The application leverages the power of TCP-based RTMP (Real-Time Messaging Protocol) to deliver seamless and uninterrupted video and audio broadcasting from the baby's device to the parent's device.
 
